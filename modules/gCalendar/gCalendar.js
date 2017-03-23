@@ -31,11 +31,11 @@ Module.register("gCalendar", {
 			{
 				symbol: "calendar",
 				url: "http://www.calendarlabs.com/templates/ical/US-Holidays.ics",
-			},
-			{
-				symbol: "gCal",
-				url: "https://use.fontawesome.com/7a7f2dc046.js"
-			}
+			} //,
+//			{
+//				symbol: "gCal",
+//				url: "https://use.fontawesome.com/7a7f2dc046.js"
+//			}
 		],
 		titleReplace: {
 			"De verjaardag van ": "",
@@ -71,6 +71,7 @@ Module.register("gCalendar", {
 
 		for (var c in this.config.calendars) {
 			var calendar = this.config.calendars[c];
+			Log.log("curr calendar is " + calendar);
 			calendar.url = calendar.url.replace("webcal://", "http://");
 			this.addCalendar(calendar.url, calendar.user, calendar.pass);
 		}
