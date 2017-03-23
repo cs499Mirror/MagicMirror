@@ -21,7 +21,7 @@ Module.register("weatherforecast",{
 		animationSpeed: 1000,
 		timeFormat: config.timeFormat,
 		lang: config.language,
-		fade: true,
+		fade: false,
 		fadePoint: 0.25, // Start on 1/4th of the list.
 
 		initialLoadDelay: 2500, // 2.5 seconds delay. This delay is used to keep the OpenWeather API happy.
