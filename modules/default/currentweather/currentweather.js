@@ -24,6 +24,7 @@ Module.register("currentweather",{
 		useBeaufort: true,
 		lang: config.language,
 		showHumidity: false,
+		fade: false,
 
 		initialLoadDelay: 0, // 0 seconds delay
 		retryDelay: 2500,
