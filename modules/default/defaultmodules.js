@@ -10,7 +10,6 @@
 var defaultModules = [
 	"alert",
 	"calendar",
-	"gcalendar",
 	"clock",
 	"compliments",
 	"currentweather",

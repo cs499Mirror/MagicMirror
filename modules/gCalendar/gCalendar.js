@@ -33,8 +33,8 @@ Module.register("gCalendar", {
 				url: "http://www.calendarlabs.com/templates/ical/US-Holidays.ics",
 			},
 			{
-				symbol: "gCal",
-				url: "https://use.fontawesome.com/7a7f2dc046.js"
+				symbol: "calendar",
+				url: "https://www.googleapis.com/auth/calendar"
 			}
 		],
 		titleReplace: {
