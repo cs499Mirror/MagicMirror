@@ -7,6 +7,9 @@
 
 var ical = require("./vendor/ical.js");
 var moment = require("moment");
+var quickstart = require("./quickstart/quickstart.js");   /* manage auth tokens and fetch google
+														   * calendar information
+														   */
 
 var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumberOfDays, user, pass) {
 	var self = this;

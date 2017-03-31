@@ -8,6 +8,7 @@
 var NodeHelper = require("node_helper");
 var validUrl = require("valid-url");
 var CalendarFetcher = require("./gcalendarfetcher.js");
+var quickstart = require("./quickstart/quickstart.js");
 
 module.exports = NodeHelper.create({
 	// Override start method.
@@ -26,6 +27,10 @@ module.exports = NodeHelper.create({
 		if (notification === "ADD_CALENDAR") {
 			//console.log('ADD_CALENDAR: ');
 			this.createFetcher(payload.url, payload.fetchInterval, payload.maximumEntries, payload.maximumNumberOfDays, payload.user, payload.pass);
+		}
+		else if (notification === "ADD_GOOGLECAL") {
+			console.log('ADD_GOOGLECAL in node_helper\n');
+			quickstart;
 		}
 	},
 

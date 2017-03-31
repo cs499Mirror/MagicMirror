@@ -300,13 +300,23 @@ Module.register("gCalendar", {
 	 * argument url sting - Url to add.
 	 */
 	addCalendar: function (url, user, pass) {
-		this.sendSocketNotification("ADD_CALENDAR", {
-			url: url,
-			maximumEntries: this.config.maximumEntries,
-			maximumNumberOfDays: this.config.maximumNumberOfDays,
-			fetchInterval: this.config.fetchInterval,
-			user: user,
-			pass: pass
+		if (url === "https://www.googleapis.com/auth/calendar")
+			this.sendSocketNotification("ADD_GOOGLECAL", {
+				url: url,
+				maximumEntries: this.config.maximumEntries,
+            	maximumNumberOfDays: this.config.maximumNumberOfDays,
+            	fetchInterval: this.config.fetchInterval,
+            	user: user,
+            	pass: pass
+			});
+		else	
+			this.sendSocketNotification("ADD_CALENDAR", {
+				url: url,
+				maximumEntries: this.config.maximumEntries,
+				maximumNumberOfDays: this.config.maximumNumberOfDays,
+				fetchInterval: this.config.fetchInterval,
+				user: user,
+				pass: pass
 		});
 	},
 
