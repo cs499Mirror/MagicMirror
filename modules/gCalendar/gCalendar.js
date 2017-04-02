@@ -73,6 +73,7 @@ Module.register("gCalendar", {
 			var calendar = this.config.calendars[c];
 			calendar.url = calendar.url.replace("webcal://", "http://");
 			this.addCalendar(calendar.url, calendar.user, calendar.pass);
+			Console.log('in gCalendar, calendar, url is\n' + calendar.url);
 		}
 
 		this.calendarData = {};
@@ -89,8 +90,10 @@ Module.register("gCalendar", {
 				if (this.config.broadcastEvents) {
 					this.broadcastEvents();
 				}
-			}
-		} else if (notification === "FETCH_ERROR") {
+		/*} else if (notification === "GOOGLECAL_EVENTS") {
+			// ADD CODE FOR GOOGLE CALENDAR...MAYBE PARSE HERE? IDK YET
+			console.log('\nGOOGLECAL_EVENTS in gCalendar.js\n');
+	*/	} else if (notification === "FETCH_ERROR") {
 			Log.error("Calendar Error. Could not fetch calendar: " + payload.url);
 		} else if (notification === "INCORRECT_URL") {
 			Log.error("Calendar Error. Incorrect url: " + payload.url);
@@ -255,6 +258,8 @@ Module.register("gCalendar", {
 	hasCalendarURL: function (url) {
 		for (var c in this.config.calendars) {
 			var calendar = this.config.calendars[c];
+			console.log(url);
+			console.log(calendar.url);
 			if (calendar.url === url) {
 				return true;
 			}
@@ -300,7 +305,7 @@ Module.register("gCalendar", {
 	 * argument url sting - Url to add.
 	 */
 	addCalendar: function (url, user, pass) {
-		if (url === "https://www.googleapis.com/auth/calendar")
+	/*	if (url === "https://www.googleapis.com/auth/calendar")
 			this.sendSocketNotification("ADD_GOOGLECAL", {
 				url: url,
 				maximumEntries: this.config.maximumEntries,
@@ -309,7 +314,7 @@ Module.register("gCalendar", {
             	user: user,
             	pass: pass
 			});
-		else	
+		else*/	
 			this.sendSocketNotification("ADD_CALENDAR", {
 				url: url,
 				maximumEntries: this.config.maximumEntries,
@@ -318,6 +323,7 @@ Module.register("gCalendar", {
 				user: user,
 				pass: pass
 		});
+		console.log('ADD_CALENDAR in gCalendar');
 	},
 
 	/* symbolForUrl(url)

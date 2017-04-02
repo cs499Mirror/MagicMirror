@@ -25,12 +25,14 @@ module.exports = NodeHelper.create({
 	// Override socketNotificationReceived method.
 	socketNotificationReceived: function(notification, payload) {
 		if (notification === "ADD_CALENDAR") {
-			//console.log('ADD_CALENDAR: ');
+			console.log('ADD_CALENDAR: ');
 			this.createFetcher(payload.url, payload.fetchInterval, payload.maximumEntries, payload.maximumNumberOfDays, payload.user, payload.pass);
 		}
 		else if (notification === "ADD_GOOGLECAL") {
 			console.log('ADD_GOOGLECAL in node_helper\n');
-			quickstart;
+			//might have to remove line below...
+		//	this.createFetcher(payload.url, payload.fetchInterval, payload.maximumEntries, payload.maximumNumberOfDays, payload.user, payload.pass);
+			//quickstart;
 		}
 	},
 
@@ -51,6 +53,7 @@ module.exports = NodeHelper.create({
 		}
 
 		var fetcher;
+		console.log('node_helper, type of fetcher, should be undefined, is \n' + typeof self.fetchers[url]);
 		if (typeof self.fetchers[url] === "undefined") {
 			console.log("Create new calendar fetcher for url: " + url + " - Interval: " + fetchInterval);
 			fetcher = new CalendarFetcher(url, fetchInterval, maximumEntries, maximumNumberOfDays, user, pass);
@@ -59,10 +62,16 @@ module.exports = NodeHelper.create({
 				//console.log('Broadcast events.');
 				//console.log(fetcher.events());
 
-				self.sendSocketNotification("CALENDAR_EVENTS", {
-					url: fetcher.url(),
-					events: fetcher.events()
-				});
+		/*		if (url === 'https://www.googleapis.com/auth/calendar')
+                	self.sendSocketNotification("GOOGLECAL_EVENTS", {
+                    	url: fetcher.url(),
+                    	events: fetcher.events()
+                	});
+				else*/
+					self.sendSocketNotification("CALENDAR_EVENTS", {
+						url: fetcher.url(),
+						events: fetcher.events()
+					});
 			});
 
 			fetcher.onError(function(fetcher, error) {

@@ -43,6 +43,11 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
 			}
 		}
 
+	/* NEED TO ADD IF === 'https://www.googleapis.com/auth/calendar' else do below.  If it is
+    *  THE GOOGLE CAL, CALL QUICKSTART, RETURN EVENTS AND PARSE AND PUT INTO FORMAT USED
+	*  IN gCalendar.js  -jcg
+	*/ 
+
 		ical.fromURL(url, opts, function(err, data) {
 			if (err) {
 				fetchFailedCallback(self, err);
