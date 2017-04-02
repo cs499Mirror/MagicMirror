@@ -7,9 +7,9 @@
 
 var ical = require("./vendor/ical.js");
 var moment = require("moment");
-var quickstart = require("./quickstart/quickstart.js");   /* manage auth tokens and fetch google
-														   * calendar information
-														   */
+//var quickstart = require("./quickstart/quickstart.js");   /* manage auth tokens and fetch google
+//														   * calendar information
+//														   */
 
 var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumberOfDays, user, pass) {
 	var self = this;
@@ -42,7 +42,15 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
 				sendImmediately: true
 			}
 		}
-
+	
+	/* NEED TO ADD IF === 'https://www.googleapis.com/auth/calendar' else do below.  If it is
+    *  THE GOOGLE CAL, CALL QUICKSTART, RETURN EVENTS AND PARSE AND PUT INTO FORMAT USED
+	*  IN gCalendar.js  -jcg
+	*/
+		if (url === 'https://www.googleapis.com/auth/calendar') {
+			console.log("..in gcalendarfetcher, here's current cal");
+//			quickstart;
+		}
 		ical.fromURL(url, opts, function(err, data) {
 			if (err) {
 				fetchFailedCallback(self, err);

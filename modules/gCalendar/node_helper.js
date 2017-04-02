@@ -8,7 +8,7 @@
 var NodeHelper = require("node_helper");
 var validUrl = require("valid-url");
 var CalendarFetcher = require("./gcalendarfetcher.js");
-var quickstart = require("./quickstart/quickstart.js");
+//var quickstart = require("./quickstart/quickstart.js");
 
 module.exports = NodeHelper.create({
 	// Override start method.
