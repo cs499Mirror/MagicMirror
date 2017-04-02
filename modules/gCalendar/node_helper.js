@@ -30,7 +30,8 @@ module.exports = NodeHelper.create({
 		}
 		else if (notification === "ADD_GOOGLECAL") {
 			console.log('ADD_GOOGLECAL in node_helper\n');
-			quickstart;
+			this.createFetcher(payload.url, payload.fetchInterval, payload.maximumEntries, payload.maximumNumberOfDays, payload.user, payload.pass);
+//			quickstart;
 		}
 	},
 
@@ -59,10 +60,16 @@ module.exports = NodeHelper.create({
 				//console.log('Broadcast events.');
 				//console.log(fetcher.events());
 
-				self.sendSocketNotification("CALENDAR_EVENTS", {
-					url: fetcher.url(),
-					events: fetcher.events()
-				});
+				if (url === 'https://www.googleapis.com/auth/calendar')
+                	self.sendSocketNotification("GOOGLECAL_EVENTS", {
+                    	url: fetcher.url(),
+                    	events: fetcher.events()
+                	});
+				else
+					self.sendSocketNotification("CALENDAR_EVENTS", {
+						url: fetcher.url(),
+						events: fetcher.events()
+					});
 			});
 
 			fetcher.onError(function(fetcher, error) {
