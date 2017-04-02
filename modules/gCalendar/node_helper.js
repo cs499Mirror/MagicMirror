@@ -8,6 +8,8 @@
 var NodeHelper = require("node_helper");
 var validUrl = require("valid-url");
 var CalendarFetcher = require("./gcalendarfetcher.js");
+var quickstart = require("./quickstart/quickstart.js");
+var events = [];
 
 module.exports = NodeHelper.create({
 	// Override start method.
@@ -18,9 +20,15 @@ module.exports = NodeHelper.create({
 		this.fetchers = [];
 
 		console.log("Starting node helper for: " + this.name);
+    	
+		// if gCal, do this
+		if (this.name == "https://www.googleapis.com/auth/calendar.readonly"){
+        	events = quickstart;
+        	console.log("events in node_hlpr: " + events);
+    	}
 
 	},
-
+	
 	// Override socketNotificationReceived method.
 	socketNotificationReceived: function(notification, payload) {
 		if (notification === "ADD_CALENDAR") {

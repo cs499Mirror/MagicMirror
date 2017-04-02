@@ -6,7 +6,9 @@
  */
 
 var ical = require("./vendor/ical.js");
+//var client_secret = require("quickstart/client_secret.json");
 var moment = require("moment");
+//var quickstart = require("./quickstart/quickstart.js")
 
 var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumberOfDays, user, pass) {
 	var self = this;
