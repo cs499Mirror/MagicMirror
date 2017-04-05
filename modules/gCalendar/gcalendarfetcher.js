@@ -7,9 +7,10 @@
 
 var ical = require("./vendor/ical.js");
 var moment = require("moment");
-//var quickstart = require("./quickstart/quickstart.js");   /* manage auth tokens and fetch google
-//														   * calendar information
-//														   */
+var google = require('googleapis');
+var quickstart = require("./quickstart/quickstart.js");   /* manage auth tokens and fetch google
+														   * calendar information
+														   */
 
 var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumberOfDays, user, pass) {
 	var self = this;
@@ -50,7 +51,13 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
 		if (url === 'https://www.googleapis.com/auth/calendar') {
 			console.log("..in gcalendarfetcher, here's current cal");
 //			quickstart;
+			var gCal = quickstart.getCalendar();
+			console.log('gcal = ' + gCal);
+			for (key in gCal){
+				console.log(gCal[key]);
+			}
 		}
+		
 		ical.fromURL(url, opts, function(err, data) {
 			if (err) {
 				fetchFailedCallback(self, err);
@@ -66,6 +73,7 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
 			for (var e in data) {
 				var event = data[e];
 				var now = new Date();
+				console.log('now = ' + now);
 				var today = moment().startOf("day").toDate();
 				var future = moment().startOf("day").add(maximumNumberOfDays, "days").subtract(1,"seconds").toDate(); // Subtract 1 second so that events that start on the middle of the night will not repeat.
 
@@ -154,7 +162,11 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
 						}
 
 						// Every thing is good. Add it to the list.
-
+/*						console.log('how ical stuff looks');
+						console.log('startDate ' + startDate);
+						console.log('endDate ' + endDate);
+						console.log('fullDayEvent ' + fullDayEvent);
+						console.log('description ' + description);*/
 						newEvents.push({
 							title: title,
 							startDate: startDate.format("x"),
