@@ -20,7 +20,7 @@ var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
 var TOKEN_PATH = TOKEN_DIR + 'calendar-nodejs-quickstart.json';
 
 // Google Oauth token
-var auth = [];
+var auth = {};
 
 // Load user's client_secret.js file
 fs.readFile('modules/gCalendar/quickstart/client_secret.json', function processClientSecrets(err, content) {
@@ -228,7 +228,7 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
 	*/
 		if (url === 'https://www.googleapis.com/auth/calendar') {
 			console.log("..in gcalendarfetcher, here's current cal");
-			listEvents(auth);	
+			//listEvents(auth);	
 		}
 		ical.fromURL(url, opts, function(err, data) {
 			if (err) {
