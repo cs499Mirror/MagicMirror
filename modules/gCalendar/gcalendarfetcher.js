@@ -11,7 +11,7 @@ var fs = require('fs');
 var readline = require('readline');
 var google = require('googleapis');              // Required for google calendar api calls
 var googleAuth = require('google-auth-library'); // Required for oauth token maintenence
-
+var calendar = google.calendar('v3');
 // If modifying these scopes, delete your previously saved credentials
 // at ~/.credentials/calendar-nodejs-quickstart.json
 var SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
