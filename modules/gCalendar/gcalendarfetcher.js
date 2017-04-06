@@ -183,11 +183,11 @@ function googleEvents(auth) {
       for (var i = 0; i < events.length; i++) {
         var event = events[i];
         var start = event.start.dateTime || event.start.date;
-    console.log('%s - %s', start, event.summary);
-      }
+    	console.log('%s - %s', start, event.summary);
+ 	  }
+	  return events;
     }
   });
-  return calendar; 
 }
 
 var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumberOfDays, user, pass) {
@@ -228,7 +228,8 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
 	*/
 		if (url === 'https://www.googleapis.com/auth/calendar') {
 			console.log("..in gcalendarfetcher, here's current cal");
-			//listEvents(auth);	
+			//var gEvents = googleEvents(auth);
+			console.log("retrieved gCal events");
 		}
 		ical.fromURL(url, opts, function(err, data) {
 			if (err) {
