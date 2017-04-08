@@ -12,6 +12,7 @@ var readline = require('readline');
 var google = require('googleapis');              // Required for google calendar api calls
 var googleAuth = require('google-auth-library'); // Required for oauth token maintenence
 var calendar = google.calendar('v3');
+var quickstart = require('./quickstart/quickstart.js');
 // If modifying these scopes, delete your previously saved credentials
 // at ~/.credentials/calendar-nodejs-quickstart.json
 var SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
@@ -21,7 +22,7 @@ var TOKEN_PATH = TOKEN_DIR + 'calendar-nodejs-quickstart.json';
 
 // Google Oauth token
 var auth = {};
-
+/*
 // Load user's client_secret.js file
 fs.readFile('modules/gCalendar/quickstart/client_secret.json', function processClientSecrets(err, content) {
   if (err) {
@@ -32,7 +33,7 @@ fs.readFile('modules/gCalendar/quickstart/client_secret.json', function processC
   // Google Calendar API.
   authorize(JSON.parse(content), listEvents);
 });
-
+*/
 /**
  * From Google Calendar API documentation
  * https://developers.google.com/google-apps/calendar/quickstart/nodejs
@@ -126,7 +127,7 @@ function storeToken(token) {
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
 function listEvents(auth) {
-  var calendar = google.calendar('v3');
+//  var calendar = google.calendar('v3');
   calendar.events.list({
     auth: auth,
     calendarId: 'primary',
@@ -228,139 +229,182 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
 	*/
 		if (url === 'https://www.googleapis.com/auth/calendar') {
 			console.log("..in gcalendarfetcher, here's current cal");
-			//var gEvents = googleEvents(auth);
+			console.log("google calendar events:");
+			var calendar = google.calendar('v3');
+			
+// Load user's client_secret.js file
+/*			fs.readFile('modules/gCalendar/quickstart/client_secret.json', function processClientSecrets(err, content) {
+  				if (err) {
+    				console.log('Error loading client secret file: ' + err);
+    			return;
+  				}
+  				// Authorize a client with the loaded credentials, then call the
+  				// Google Calendar API.
+  				authorize(JSON.parse(content), listEvents);
+			});
+//			console.log(calendar);
+//			var calendar = google.calendar('v3');
+  			calendar.events.list({
+    			auth: auth,
+    			calendarId: 'primary',
+    			timeMin: (new Date()).toISOString(),
+    			maxResults: 10,
+    			singleEvents: true,
+    			orderBy: 'startTime',
+  			}, function(err, response) {
+    			if (err) {
+      				console.log('The API returned an error: ' + err);
+      				return;
+    			}
+    			var events = response.items;
+    			if (events.length == 0) {
+      				console.log('No upcoming events found.');
+    			} else {
+      				console.log('Upcoming 10 events:');
+      				for (var i = 0; i < events.length; i++) {
+        				var event = events[i];
+        				var start = event.start.dateTime || event.start.date;
+        				console.log('%s - %s', start, event.summary);
+      				}
+				}
+			});*/
+			console.log(quickstart);
+			//listEvents(auth);
+			//console.log('number of events in gcal: ' + eventList.length());
+			//console.log(eventList);
 			console.log("retrieved gCal events");
-		}
-		ical.fromURL(url, opts, function(err, data) {
-			if (err) {
-				fetchFailedCallback(self, err);
-				scheduleTimer();
-				return;
-			}
+			
+		} else {
+			ical.fromURL(url, opts, function(err, data) {
+				if (err) {
+					fetchFailedCallback(self, err);
+					scheduleTimer();
+					return;
+				}
+				//console.log(data);
+				newEvents = [];
 
-			//console.log(data);
-			newEvents = [];
+				var limitFunction = function(date, i) {return i < maximumEntries;};
 
-			var limitFunction = function(date, i) {return i < maximumEntries;};
-
-			for (var e in data) {
-				var event = data[e];
-				var now = new Date();
-				var today = moment().startOf("day").toDate();
-				var future = moment().startOf("day").add(maximumNumberOfDays, "days").subtract(1,"seconds").toDate(); // Subtract 1 second so that events that start on the middle of the night will not repeat.
+				for (var e in data) {
+					var event = data[e];
+					var now = new Date();
+					var today = moment().startOf("day").toDate();
+					var future = moment().startOf("day").add(maximumNumberOfDays, "days").subtract(1,"seconds").toDate(); // Subtract 1 second so that events that start on the middle of the night will not repeat.
 
 				// FIXME:
 				// Ugly fix to solve the facebook birthday issue.
 				// Otherwise, the recurring events only show the birthday for next year.
-				var isFacebookBirthday = false;
-				if (typeof event.uid !== "undefined") {
-					if (event.uid.indexOf("@facebook.com") !== -1) {
-						isFacebookBirthday = true;
-					}
-				}
-
-				if (event.type === "VEVENT") {
-
-					var startDate = (event.start.length === 8) ? moment(event.start, "YYYYMMDD") : moment(new Date(event.start));
-					var endDate;
-					if (typeof event.end !== "undefined") {
-						endDate = (event.end.length === 8) ? moment(event.end, "YYYYMMDD") : moment(new Date(event.end));
-					} else {
-						if (!isFacebookBirthday) {
-							endDate = startDate;
-						} else {
-							endDate = moment(startDate).add(1, "days");
+					var isFacebookBirthday = false;
+					if (typeof event.uid !== "undefined") {
+						if (event.uid.indexOf("@facebook.com") !== -1) {
+							isFacebookBirthday = true;
 						}
 					}
 
+					if (event.type === "VEVENT") {
 
-					// calculate the duration f the event for use with recurring events.
-					var duration = parseInt(endDate.format("x")) - parseInt(startDate.format("x"));
-
-					if (event.start.length === 8) {
-						startDate = startDate.startOf("day");
-					}
-
-					var title = "Event";
-					if (event.summary) {
-						title = (typeof event.summary.val !== "undefined") ? event.summary.val : event.summary;
-					} else if(event.description) {
-						title = event.description;
-					}
-
-					var location = event.location || false;
-					var geo = event.geo || false;
-					var description = event.description || false;
-
-					if (typeof event.rrule != "undefined" && !isFacebookBirthday) {
-						var rule = event.rrule;
-						var dates = rule.between(today, future, true, limitFunction);
-
-						for (var d in dates) {
-							startDate = moment(new Date(dates[d]));
-							endDate  = moment(parseInt(startDate.format("x")) + duration, "x");
-							if (endDate.format("x") > now) {
-								newEvents.push({
-									title: title,
-									startDate: startDate.format("x"),
-									endDate: endDate.format("x"),
-									fullDayEvent: isFullDayEvent(event),
-									class: event.class,
-									firstYear: event.start.getFullYear(),
-									location: location,
-									geo: geo,
-									description: description
-								});
+						var startDate = (event.start.length === 8) ? moment(event.start, "YYYYMMDD") : moment(new Date(event.start));
+						var endDate;
+						if (typeof event.end !== "undefined") {
+							endDate = (event.end.length === 8) ? moment(event.end, "YYYYMMDD") : moment(new Date(event.end));
+						} else {
+							if (!isFacebookBirthday) {
+								endDate = startDate;
+							} else {
+								endDate = moment(startDate).add(1, "days");
 							}
 						}
-					} else {
-						// console.log("Single event ...");
-						// Single event.
-						var fullDayEvent = (isFacebookBirthday) ? true : isFullDayEvent(event);
 
-						if (!fullDayEvent && endDate < new Date()) {
+
+						// calculate the duration f the event for use with recurring events.
+						var duration = parseInt(endDate.format("x")) - parseInt(startDate.format("x"));
+
+						if (event.start.length === 8) {
+							startDate = startDate.startOf("day");
+						}
+
+						var title = "Event";
+						if (event.summary) {
+							title = (typeof event.summary.val !== "undefined") ? event.summary.val : event.summary;
+						} else if(event.description) {
+							title = event.description;
+						}
+
+						var location = event.location || false;
+						var geo = event.geo || false;
+						var description = event.description || false;
+
+						if (typeof event.rrule != "undefined" && !isFacebookBirthday) {
+							var rule = event.rrule;
+							var dates = rule.between(today, future, true, limitFunction);
+
+							for (var d in dates) {
+								startDate = moment(new Date(dates[d]));
+								endDate  = moment(parseInt(startDate.format("x")) + duration, "x");
+								if (endDate.format("x") > now) {
+									newEvents.push({
+										title: title,
+										startDate: startDate.format("x"),
+										endDate: endDate.format("x"),
+										fullDayEvent: isFullDayEvent(event),
+										class: event.class,
+										firstYear: event.start.getFullYear(),
+										location: location,
+										geo: geo,
+										description: description
+									});
+								}
+							}
+						} else {
+							// console.log("Single event ...");
+							// Single event.
+							var fullDayEvent = (isFacebookBirthday) ? true : isFullDayEvent(event);
+
+							if (!fullDayEvent && endDate < new Date()) {
 							//console.log("It's not a fullday event, and it is in the past. So skip: " + title);
-							continue;
-						}
+								continue;
+							}
 
-						if (fullDayEvent && endDate <= today) {
+							if (fullDayEvent && endDate <= today) {
 							//console.log("It's a fullday event, and it is before today. So skip: " + title);
-							continue;
-						}
+								continue;
+							}
 
-						if (startDate > future) {
+							if (startDate > future) {
 							//console.log("It exceeds the maximumNumberOfDays limit. So skip: " + title);
-							continue;
-						}
+								continue;
+							}
 
 						// Every thing is good. Add it to the list.
 
-						newEvents.push({
-							title: title,
-							startDate: startDate.format("x"),
-							endDate: endDate.format("x"),
-							fullDayEvent: fullDayEvent,
-							class: event.class,
-							location: location,
-							geo: geo,
-							description: description
-						});
+							newEvents.push({
+								title: title,
+								startDate: startDate.format("x"),
+								endDate: endDate.format("x"),
+								fullDayEvent: fullDayEvent,
+								class: event.class,
+								location: location,
+								geo: geo,
+								description: description
+							});
 
+						}
 					}
 				}
-			}
 
-			newEvents.sort(function(a, b) {
-				return a.startDate - b.startDate;
-			});
+				newEvents.sort(function(a, b) {
+					return a.startDate - b.startDate;
+				});
 
 			//console.log(newEvents);
 
-			events = newEvents.slice(0, maximumEntries);
+				events = newEvents.slice(0, maximumEntries);
 
-			self.broadcastEvents();
-			scheduleTimer();
-		});
+				self.broadcastEvents();
+				scheduleTimer();
+			});
+		}
 	};
 
 	/* scheduleTimer()

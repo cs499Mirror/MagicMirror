@@ -90,9 +90,9 @@ Module.register("gCalendar", {
 					this.broadcastEvents();
 				}
 			}
-		} else if (notification === "GOOGLECAL_EVENTS") {
-			// ADD CODE FOR GOOGLE CALENDAR...MAYBE PARSE HERE? IDK YET
-			console.log('\nGOOGLECAL_EVENTS in gCalendar.js\n');
+//		} else if (notification === "GOOGLECAL_EVENTS") {
+//			// ADD CODE FOR GOOGLE CALENDAR...MAYBE PARSE HERE? IDK YET
+//			console.log('\nGOOGLECAL_EVENTS in gCalendar.js\n');
 		} else if (notification === "FETCH_ERROR") {
 			Log.error("Calendar Error. Could not fetch calendar: " + payload.url);
 		} else if (notification === "INCORRECT_URL") {

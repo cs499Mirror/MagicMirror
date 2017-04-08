@@ -60,12 +60,12 @@ module.exports = NodeHelper.create({
 				//console.log('Broadcast events.');
 				//console.log(fetcher.events());
 
-				if (url === 'https://www.googleapis.com/auth/calendar')
+/*				if (url === 'https://www.googleapis.com/auth/calendar')
                 	self.sendSocketNotification("GOOGLECAL_EVENTS", {
                     	url: fetcher.url(),
                     	events: fetcher.events()
                 	});
-				else
+				else */
 					self.sendSocketNotification("CALENDAR_EVENTS", {
 						url: fetcher.url(),
 						events: fetcher.events()
