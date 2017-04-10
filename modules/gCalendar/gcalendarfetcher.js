@@ -67,7 +67,7 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
 			
 			events = quickstart;
 			console.log(events);
-			
+			self.broadcastEvents();	
 			//listEvents(auth);
 			//console.log('number of events in gcal: ' + eventList.length());
 			//console.log(eventList);
