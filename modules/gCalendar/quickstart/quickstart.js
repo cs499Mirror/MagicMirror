@@ -124,7 +124,8 @@ function listEvents(auth) {
       console.log('No upcoming events found.');
     } else {
       console.log('Upcoming 10 events:');
-      for (var i = 0; i < events.length; i++) {
+    	console.log('now in quickstart...');  
+	for (var i = 0; i < events.length; i++) {
         var event = events[i];
         var start = event.start.dateTime || event.start.date;
 		var startDate = moment(new Date(start));
@@ -136,6 +137,6 @@ function listEvents(auth) {
 	  }
     }
   });
-  //return eventList;
+//  return eventList;
 }
 module.exports = eventList;
