@@ -60,11 +60,14 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
     *  THE GOOGLE CAL, CALL QUICKSTART, RETURN EVENTS AND PARSE AND PUT INTO FORMAT USED
 	*  IN gCalendar.js  -jcg
 	*/
+		console.log(url);
 		if (url === 'https://www.googleapis.com/auth/calendar') {
 			console.log("..in gcalendarfetcher, here's current cal");
 			console.log("google calendar events:");
 			var calendar = google.calendar('v3');
-			
+//			getEvents(quickstart, function(callback) {
+//				events = quickstart;
+//			});
 			events = quickstart;
 			console.log(events);
 			self.broadcastEvents();	

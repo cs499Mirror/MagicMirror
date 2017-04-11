@@ -135,6 +135,7 @@ function listEvents(auth) {
 			startDate: startDate.format("x")
 		});
 	  }
+		console.log(eventList);
     }
   });
 //  return eventList;
