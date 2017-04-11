@@ -8,8 +8,7 @@
 var NodeHelper = require("node_helper");
 var validUrl = require("valid-url");
 var CalendarFetcher = require("./gcalendarfetcher.js");
-var quickstart = require("./quickstart/quickstart.js");
-var events = [];
+//var quickstart = require("./quickstart/quickstart.js");
 
 module.exports = NodeHelper.create({
 	// Override start method.
@@ -20,20 +19,19 @@ module.exports = NodeHelper.create({
 		this.fetchers = [];
 
 		console.log("Starting node helper for: " + this.name);
-    	
-		// if gCal, do this
-		if (this.name == "https://www.googleapis.com/auth/calendar.readonly"){
-        	events = quickstart;
-        	console.log("events in node_hlpr: " + events);
-    	}
 
 	},
-	
+
 	// Override socketNotificationReceived method.
 	socketNotificationReceived: function(notification, payload) {
 		if (notification === "ADD_CALENDAR") {
 			//console.log('ADD_CALENDAR: ');
 			this.createFetcher(payload.url, payload.fetchInterval, payload.maximumEntries, payload.maximumNumberOfDays, payload.user, payload.pass);
+		}
+		else if (notification === "ADD_GOOGLECAL") {
+			console.log('ADD_GOOGLECAL in node_helper\n');
+			this.createFetcher(payload.url, payload.fetchInterval, payload.maximumEntries, payload.maximumNumberOfDays, payload.user, payload.pass);
+//			quickstart;
 		}
 	},
 
@@ -62,10 +60,16 @@ module.exports = NodeHelper.create({
 				//console.log('Broadcast events.');
 				//console.log(fetcher.events());
 
-				self.sendSocketNotification("CALENDAR_EVENTS", {
-					url: fetcher.url(),
-					events: fetcher.events()
-				});
+/*				if (url === 'https://www.googleapis.com/auth/calendar')
+                	self.sendSocketNotification("GOOGLECAL_EVENTS", {
+                    	url: fetcher.url(),
+                    	events: fetcher.events()
+                	});
+				else */
+					self.sendSocketNotification("CALENDAR_EVENTS", {
+						url: fetcher.url(),
+						events: fetcher.events()
+					});
 			});
 
 			fetcher.onError(function(fetcher, error) {
@@ -85,3 +89,4 @@ module.exports = NodeHelper.create({
 		fetcher.startFetch();
 	}
 });
+

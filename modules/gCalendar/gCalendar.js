@@ -1,4 +1,4 @@
-/* global Module */
+/* Global Module */
 
 /* Magic Mirror
  * Module: Calendar
@@ -31,11 +31,11 @@ Module.register("gCalendar", {
 			{
 				symbol: "calendar",
 				url: "http://www.calendarlabs.com/templates/ical/US-Holidays.ics",
-			} //,
-//			{
-//				symbol: "gCal",
-//				url: "https://use.fontawesome.com/7a7f2dc046.js"
-//			}
+			},
+			{
+				symbol: "calendar",
+				url: "https://www.googleapis.com/auth/calendar"
+			}
 		],
 		titleReplace: {
 			"De verjaardag van ": "",
@@ -71,7 +71,6 @@ Module.register("gCalendar", {
 
 		for (var c in this.config.calendars) {
 			var calendar = this.config.calendars[c];
-			Log.log("curr calendar is " + calendar);
 			calendar.url = calendar.url.replace("webcal://", "http://");
 			this.addCalendar(calendar.url, calendar.user, calendar.pass);
 		}
@@ -91,6 +90,9 @@ Module.register("gCalendar", {
 					this.broadcastEvents();
 				}
 			}
+//		} else if (notification === "GOOGLECAL_EVENTS") {
+//			// ADD CODE FOR GOOGLE CALENDAR...MAYBE PARSE HERE? IDK YET
+//			console.log('\nGOOGLECAL_EVENTS in gCalendar.js\n');
 		} else if (notification === "FETCH_ERROR") {
 			Log.error("Calendar Error. Could not fetch calendar: " + payload.url);
 		} else if (notification === "INCORRECT_URL") {
@@ -301,13 +303,23 @@ Module.register("gCalendar", {
 	 * argument url sting - Url to add.
 	 */
 	addCalendar: function (url, user, pass) {
-		this.sendSocketNotification("ADD_CALENDAR", {
-			url: url,
-			maximumEntries: this.config.maximumEntries,
-			maximumNumberOfDays: this.config.maximumNumberOfDays,
-			fetchInterval: this.config.fetchInterval,
-			user: user,
-			pass: pass
+		if (url === "https://www.googleapis.com/auth/calendar")
+			this.sendSocketNotification("ADD_GOOGLECAL", {
+				url: url,
+				maximumEntries: this.config.maximumEntries,
+            	maximumNumberOfDays: this.config.maximumNumberOfDays,
+            	fetchInterval: this.config.fetchInterval,
+            	user: user,
+            	pass: pass
+			});
+		else	
+			this.sendSocketNotification("ADD_CALENDAR", {
+				url: url,
+				maximumEntries: this.config.maximumEntries,
+				maximumNumberOfDays: this.config.maximumNumberOfDays,
+				fetchInterval: this.config.fetchInterval,
+				user: user,
+				pass: pass
 		});
 	},
 

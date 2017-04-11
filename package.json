@@ -40,7 +40,7 @@
     "express": "^4.14.0",
     "express-ipfilter": "latest",
     "feedme": "latest",
-    "google-auth-library": "^0.10.0",
+    "google-auth-library": "file:node_modules/google-auth-library",
     "googleapis": "^18.0.0",
     "helmet": "^3.1.0",
     "iconv-lite": "latest",

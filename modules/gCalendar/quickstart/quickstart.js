@@ -2,6 +2,7 @@ var fs = require('fs');
 var readline = require('readline');
 var google = require('googleapis');
 var googleAuth = require('google-auth-library');
+var moment = require('moment');
 
 // If modifying these scopes, delete your previously saved credentials
 // at ~/.credentials/calendar-nodejs-quickstart.json
@@ -9,6 +10,8 @@ var SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
 var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
     process.env.USERPROFILE) + '/.credentials/';
 var TOKEN_PATH = TOKEN_DIR + 'calendar-nodejs-quickstart.json';
+
+var eventList = [];
 
 console.log('now in quickstart.js');
 
@@ -121,11 +124,19 @@ function listEvents(auth) {
       console.log('No upcoming events found.');
     } else {
       console.log('Upcoming 10 events:');
-      for (var i = 0; i < events.length; i++) {
+    	console.log('now in quickstart...');  
+	for (var i = 0; i < events.length; i++) {
         var event = events[i];
         var start = event.start.dateTime || event.start.date;
-	console.log('%s - %s', start, event.summary);
-      }
+		var startDate = moment(new Date(start));
+		console.log('%s - %s', start, event.summary);
+        eventList.push({
+			title: event.summary,
+			startDate: startDate.format("x")
+		});
+	  }
     }
   });
+//  return eventList;
 }
+module.exports = eventList;
