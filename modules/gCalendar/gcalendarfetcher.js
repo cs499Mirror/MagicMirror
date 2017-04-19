@@ -11,6 +11,7 @@ var fs = require('fs');
 var readline = require('readline');
 var google = require('googleapis');              // Required for google calendar api calls
 var googleAuth = require('google-auth-library'); // Required for oauth token maintenence
+var promise = require('promise');
 var calendar = google.calendar('v3');
 var quickstart = require('./quickstart/quickstart.js');
 // If modifying these scopes, delete your previously saved credentials
@@ -68,9 +69,14 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
 //			getEvents(quickstart, function(callback) {
 //				events = quickstart;
 //			});
-			events = quickstart;
+			//@INVESTIGATE
+			var quickstartComplete = promise.denodify(quickstart);
+			quickstartComplete.done(function (retval) {
+				events = retval;
+			});
 			console.log(events);
 			self.broadcastEvents();	
+			scheduleTimer();
 			//listEvents(auth);
 			//console.log('number of events in gcal: ' + eventList.length());
 			//console.log(eventList);
