@@ -70,18 +70,18 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
 //				events = quickstart;
 //			});
 			//@INVESTIGATE
-			var quickstartComplete = promise.denodify(quickstart);
-			quickstartComplete.done(function (retval) {
-				events = retval;
+			// var quickstartComplete = promise.resolve(quickstart);
+			var eventHolder = quickstart;
+			eventHolder.then(function(result) {
+				events = result;
+				self.broadcastEvents();
 			});
-			console.log(events);
-			self.broadcastEvents();	
 			scheduleTimer();
 			//listEvents(auth);
 			//console.log('number of events in gcal: ' + eventList.length());
 			//console.log(eventList);
 			console.log("retrieved gCal events");
-			
+
 		} else {
 			ical.fromURL(url, opts, function(err, data) {
 				if (err) {
