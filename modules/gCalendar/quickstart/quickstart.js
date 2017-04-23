@@ -16,6 +16,7 @@ var eventList = [];
 
 console.log('now in quickstart.js');
 
+// Should stop until promise is resolved?
 module.exports = new promise(function(resolve, reject) {
   // Load client secrets from a local file.
 	fs.readFile('modules/gCalendar/quickstart/client_secret.json', function processClientSecrets(err, content) {
@@ -27,10 +28,18 @@ module.exports = new promise(function(resolve, reject) {
     // Google Calendar API.
 		authorize(JSON.parse(content), listEvents);
 	});
-	if(eventList !== []) {
+	// Getting through this conditional with eventList = []
+	// Should check if the list is empty or not
+	// Will resolve and return the given value for eventList
+	if(eventList !== []){
+		console.log("Value for eventList follows."); //Debugging
+		console.log(eventList); //Debugging
+		console.log("eventList !== []"); // Debugging
 		resolve(eventList);
 	}
   else {
+    // Print out the error message
+    // List of events will be empty
     reject(Error("Calendar not retrieved.\n"));
   }
 });
@@ -133,7 +142,7 @@ function listEvents(auth) {
 			console.log('No upcoming events found.');
 		} else {
 			console.log('Upcoming 10 events:');
-    	console.log('now in quickstart...');  
+  //  	console.log('now in quickstart...');  
 			for (var i = 0; i < events.length; i++) {
 			var event = events[i];
 			var start = event.start.dateTime || event.start.date;

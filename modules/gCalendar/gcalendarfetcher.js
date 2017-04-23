@@ -72,8 +72,9 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
 			//@INVESTIGATE
 			// var quickstartComplete = promise.resolve(quickstart);
 			var eventHolder = quickstart;
-			eventHolder.then(function(result) {
+			eventHolder.done(function(result) {
 				events = result;
+				console.log(events); // Debugging
 				self.broadcastEvents();
 			});
 			scheduleTimer();

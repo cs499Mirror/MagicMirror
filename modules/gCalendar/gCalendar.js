@@ -18,7 +18,7 @@ Module.register("gCalendar", {
 		displayRepeatingCountTitle: false,
 		defaultRepeatingCountTitle: "",
 		maxTitleLength: 25,
-		fetchInterval: 5 * 60 * 1000, // Update every 5 minutes.
+		fetchInterval: 0.025 * 60 * 1000, // Update every 3 seconds.
 		animationSpeed: 2000,
 		fade: true,
 		urgency: 7,
