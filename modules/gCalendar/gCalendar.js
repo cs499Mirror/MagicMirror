@@ -22,9 +22,12 @@ Module.register("gCalendar", {
 		displayRepeatingCountTitle: false,
 		defaultRepeatingCountTitle: "",
 		maxTitleLength: 25,
+<<<<<<< HEAD
 
-	// Changed interval to one minute from 5 min .... 5 * 60 * 1000
-		fetchInterval: 60 * 1000, // Update every 5 minutes.
+	// Changed interval to one minute from 5 min .... 5 * 60 * 100
+=======
+		fetchInterval: 0.025 * 60 * 1000, // Update every 3 seconds.
+>>>>>>> b76b17d144cea92a1d6c9fe8990e79f2a168f9c2
 		animationSpeed: 2000,
 		fade: true,
 		urgency: 7,

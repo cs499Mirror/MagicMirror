@@ -86,11 +86,17 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
 //			});
 			//@INVESTIGATE
 			// var quickstartComplete = promise.resolve(quickstart);
+<<<<<<< HEAD
 //			var eventHolder = quickstart;
 //			console.log("eventHolder....\n");
 			console.log(eventHolder);
 			var eventHolder = quickstart.then(function(result) {
+=======
+			var eventHolder = quickstart;
+			eventHolder.done(function(result) {
+>>>>>>> b76b17d144cea92a1d6c9fe8990e79f2a168f9c2
 				events = result;
+				console.log(events); // Debugging
 				self.broadcastEvents();
 //				scheduleTimer();
 			});
