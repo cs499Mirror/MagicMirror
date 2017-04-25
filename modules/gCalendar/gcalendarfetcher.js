@@ -3,23 +3,27 @@
  *
  * By Michael Teeuw http://michaelteeuw.nl
  * MIT Licensed.
+ *
+ * CS499 Spr17 - Added a Google Calendar fetcher
+ * in addition to default ICal fetcher - will fetch when 
+ * Google URL is in config file and gCalendar.js calendar list
  */
 
 var ical = require("./vendor/ical.js");
 var moment = require("moment");
-var fs = require('fs');
-var readline = require('readline');
-var google = require('googleapis');              // Required for google calendar api calls
-var googleAuth = require('google-auth-library'); // Required for oauth token maintenence
+//var fs = require('fs');
+//var readline = require('readline');
+var google = require('googleapis');   // Required for google calendar api calls
+//var googleAuth = require('google-auth-library'); // Required for oauth token maintenence
 var promise = require('promise');
 var calendar = google.calendar('v3');
 var quickstart = require('./quickstart/quickstart.js');
 // If modifying these scopes, delete your previously saved credentials
 // at ~/.credentials/calendar-nodejs-quickstart.json
-var SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
-var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
-    process.env.USERPROFILE) + '/.credentials/';
-var TOKEN_PATH = TOKEN_DIR + 'calendar-nodejs-quickstart.json';
+//var SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
+//var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
+  //  process.env.USERPROFILE) + '/.credentials/';
+//var TOKEN_PATH = TOKEN_DIR + 'calendar-nodejs-quickstart.json';
 
 // Google Oauth token
 var auth = {};
@@ -57,29 +61,46 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
 			}
 		}
 	
-	/* NEED TO ADD IF === 'https://www.googleapis.com/auth/calendar' else do below.  If it is
-    *  THE GOOGLE CAL, CALL QUICKSTART, RETURN EVENTS AND PARSE AND PUT INTO FORMAT USED
-	*  IN gCalendar.js  -jcg
+	/* 
+    *  Spr17 - If current calendar is a Google calendar, call quickstart.js
+	*  and retrieve events and broadcast
 	*/
 		console.log(url);
 		if (url === 'https://www.googleapis.com/auth/calendar') {
 			console.log("..in gcalendarfetcher, here's current cal");
 			console.log("google calendar events:");
 			var calendar = google.calendar('v3');
+
+			/*
+			 * Currently having an issue retrieving events from 
+			 * quickstart. Events are not being returned
+			 * before calendar is first broadcast, but will
+			 * be broadcast after first rebroadcast interval
+			 * has passed (default 5 min). Still investigating...
+			 */
+
+
+
 //			getEvents(quickstart, function(callback) {
 //				events = quickstart;
 //			});
 			//@INVESTIGATE
 			// var quickstartComplete = promise.resolve(quickstart);
-			var eventHolder = quickstart;
-			eventHolder.then(function(result) {
+//			var eventHolder = quickstart;
+//			console.log("eventHolder....\n");
+			console.log(eventHolder);
+			var eventHolder = quickstart.then(function(result) {
 				events = result;
 				self.broadcastEvents();
+//				scheduleTimer();
 			});
-			scheduleTimer();
+
 			//listEvents(auth);
-			//console.log('number of events in gcal: ' + eventList.length());
-			//console.log(eventList);
+//			console.log('number of events in gcal: ' + eventList.length());
+			console.log("here are events:\n");
+//			console.log(events);
+//			self.broadcastEvents();
+			scheduleTimer();
 			console.log("retrieved gCal events");
 
 		} else {

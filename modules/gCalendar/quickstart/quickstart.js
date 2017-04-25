@@ -1,3 +1,18 @@
+/*
+ * CS499 Spr17 - quickstart.js is a script provided by Google
+ * Calendar documentation here:
+ * https://developers.google.com/google-apps/calendar/quickstart/nodejs
+ *
+ * quickstart interacts with the google API and google auth api
+ * to handle Oauth token maintenence as well as retrieving the 
+ * list of events. Upon successful return, a dictionary of events is
+ * created to be returned to gcalendarfetcher.js with the proper names
+ * and time in order for them to be successfully broadcast
+ *
+*/
+
+
+
 var fs = require('fs');
 var readline = require('readline');
 var google = require('googleapis');
@@ -15,6 +30,17 @@ var TOKEN_PATH = TOKEN_DIR + 'calendar-nodejs-quickstart.json';
 var eventList = [];
 
 console.log('now in quickstart.js');
+
+/*
+ * Spr17 - Google events not retrieved before initial broadcast of 
+ * calendar events, so only ICal events are being shown in first
+ * interval, but they are successfully displayed during the succeeding
+ * intervals. We are currently working with promises to overcome
+ * this problem, but have not yet found a solution. This is the promise
+ * routine we are currently using, which SHOULD make the calendar fetcher
+ * halt until successfully retrieving Google events - this is not working
+ * as we thought it would at the moment...still investigating
+*/
 
 module.exports = new promise(function(resolve, reject) {
   // Load client secrets from a local file.
@@ -134,16 +160,26 @@ function listEvents(auth) {
 		} else {
 			console.log('Upcoming 10 events:');
     	console.log('now in quickstart...');  
+		
+			/*
+			 * Spr17 - convert returned Google events into
+			 * the format (a dictionary with keys named
+			 * "summary" for the event name and "startDate" for the
+			 * starting time of the event, converted to "moment" time)
+ 	   		 * expected by the calendar fetcher
+			 * in order for proper broadcasting
+			*/
+
 			for (var i = 0; i < events.length; i++) {
-			var event = events[i];
-			var start = event.start.dateTime || event.start.date;
-			var startDate = moment(new Date(start));
-			console.log('%s - %s', start, event.summary);
-			eventList.push({
-			title: event.summary,
-			startDate: startDate.format("x")
-		});
-	  }
+				var event = events[i];
+				var start = event.start.dateTime || event.start.date;
+				var startDate = moment(new Date(start));
+				console.log('%s - %s', start, event.summary);
+				eventList.push({
+				title: event.summary,
+				startDate: startDate.format("x")
+				});
+	  		}
 			console.log(eventList);
 		}
 	});
