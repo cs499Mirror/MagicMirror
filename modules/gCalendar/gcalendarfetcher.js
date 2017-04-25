@@ -11,19 +11,10 @@
 
 var ical = require("./vendor/ical.js");
 var moment = require("moment");
-//var fs = require('fs');
-//var readline = require('readline');
 var google = require('googleapis');   // Required for google calendar api calls
-//var googleAuth = require('google-auth-library'); // Required for oauth token maintenence
 var promise = require('promise');
 var calendar = google.calendar('v3');
 var quickstart = require('./quickstart/quickstart.js');
-// If modifying these scopes, delete your previously saved credentials
-// at ~/.credentials/calendar-nodejs-quickstart.json
-//var SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
-//var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
-  //  process.env.USERPROFILE) + '/.credentials/';
-//var TOKEN_PATH = TOKEN_DIR + 'calendar-nodejs-quickstart.json';
 
 // Google Oauth token
 var auth = {};
@@ -86,19 +77,16 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
 //			});
 			//@INVESTIGATE
 			// var quickstartComplete = promise.resolve(quickstart);
-<<<<<<< HEAD
 //			var eventHolder = quickstart;
 //			console.log("eventHolder....\n");
 			console.log(eventHolder);
-			var eventHolder = quickstart.then(function(result) {
-=======
+//			var eventHolder = quickstart.then(function(result) {
 			var eventHolder = quickstart;
 			eventHolder.done(function(result) {
->>>>>>> b76b17d144cea92a1d6c9fe8990e79f2a168f9c2
 				events = result;
 				console.log(events); // Debugging
 				self.broadcastEvents();
-//				scheduleTimer();
+				scheduleTimer();
 			});
 
 			//listEvents(auth);

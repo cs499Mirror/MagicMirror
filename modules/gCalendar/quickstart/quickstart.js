@@ -31,7 +31,6 @@ var eventList = [];
 
 console.log('now in quickstart.js');
 
-<<<<<<< HEAD
 /*
  * Spr17 - Google events not retrieved before initial broadcast of 
  * calendar events, so only ICal events are being shown in first
@@ -43,9 +42,7 @@ console.log('now in quickstart.js');
  * as we thought it would at the moment...still investigating
 */
 
-=======
 // Should stop until promise is resolved?
->>>>>>> b76b17d144cea92a1d6c9fe8990e79f2a168f9c2
 module.exports = new promise(function(resolve, reject) {
   // Load client secrets from a local file.
 	fs.readFile('modules/gCalendar/quickstart/client_secret.json', function processClientSecrets(err, content) {
@@ -171,7 +168,6 @@ function listEvents(auth) {
 			console.log('No upcoming events found.');
 		} else {
 			console.log('Upcoming 10 events:');
-<<<<<<< HEAD
     	console.log('now in quickstart...');  
 		
 			/*
@@ -183,9 +179,7 @@ function listEvents(auth) {
 			 * in order for proper broadcasting
 			*/
 
-=======
   //  	console.log('now in quickstart...');  
->>>>>>> b76b17d144cea92a1d6c9fe8990e79f2a168f9c2
 			for (var i = 0; i < events.length; i++) {
 				var event = events[i];
 				var start = event.start.dateTime || event.start.date;
