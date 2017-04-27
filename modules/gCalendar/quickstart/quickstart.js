@@ -197,12 +197,15 @@ function listEvents(auth) {
 				var event = events[i];
 				var start = event.start.dateTime || event.start.date;
 				var startDate = moment(new Date(start));
+				var now = moment(new Date());
 				console.log('%s - %s', start, event.summary);
+				var endDate = moment(startDate).add(1, "days");
 				if (eventList.length === 0) {		
-				      eventList.push({
-                            title: event.summary,
-                            startDate: startDate.format("x")
-                        });				
+					eventList.push({
+						title: event.summary,
+                        startDate: startDate.format("x"),
+                	  	endDate: endDate.format("x")
+					});				
 				}
 //				console.log("Length of eventList = " + eventList.length);
 				var exists = 0;
@@ -221,10 +224,11 @@ function listEvents(auth) {
 					
 					}
 				}
-				if (exists == 0) {
+				if (exists == 0 && (startDate > now)) {
 					eventList.push({
 						title: event.summary,
-						startDate: startDate.format("x")
+						startDate: startDate.format("x"),
+	        			endDate: endDate.format("x")
 					});				
 				}
 	  		}
