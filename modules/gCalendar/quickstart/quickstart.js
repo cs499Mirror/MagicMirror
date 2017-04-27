@@ -26,9 +26,7 @@ var SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
 var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
     process.env.USERPROFILE) + '/.credentials/';
 var TOKEN_PATH = TOKEN_DIR + 'calendar-nodejs-quickstart.json';
-
 var eventList = [];
-
 console.log('now in quickstart.js');
 
 /*
@@ -43,21 +41,35 @@ console.log('now in quickstart.js');
 */
 
 // Should stop until promise is resolved?
-module.exports = new promise(function(resolve, reject) {
+//module.exports = function(){
   // Load client secrets from a local file.
-	fs.readFile('modules/gCalendar/quickstart/client_secret.json', function processClientSecrets(err, content) {
-		if (err) {
-			console.log('Error loading client secret file: ' + err);
-			return;
-		}
-    // Authorize a client with the loaded credentials, then call the
-    // Google Calendar API.
-		authorize(JSON.parse(content), listEvents);
-	});
+
+module.exports = function(arg, callback) {
+	
+//	if(arg === "no") {
+		fs.readFile('modules/gCalendar/quickstart/client_secret.json', function processClientSecrets(err, content) {
+			if (err) {
+				console.log('Error loading client secret file: ' + err);
+				return;
+			}
+    	// Authorize a client with the loaded credentials, then call the
+    	// Google Calendar API.
+			authorize(JSON.parse(content), listEvents);
+		});
+//	}
+//	else {	
+//		if(eventList != 'undefined') {	
+			console.log("RETURNED FROM QUICKSTART");
+//			module.exports = eventList;
+			return module.exports;
+//		}
+//	}
+
+}
 	// Getting through this conditional with eventList = []
 	// Should check if the list is empty or not
 	// Will resolve and return the given value for eventList
-	if(eventList !== []){
+/*	if(eventList !== []){
 		console.log("Value for eventList follows."); //Debugging
 		console.log(eventList); //Debugging
 		console.log("eventList !== []"); // Debugging
@@ -68,7 +80,7 @@ module.exports = new promise(function(resolve, reject) {
     // List of events will be empty
     reject(Error("Calendar not retrieved.\n"));
   }
-});
+}*/
 
 /**
  * Create an OAuth2 client with the given credentials, and then execute the
@@ -185,10 +197,35 @@ function listEvents(auth) {
 				var start = event.start.dateTime || event.start.date;
 				var startDate = moment(new Date(start));
 				console.log('%s - %s', start, event.summary);
-				eventList.push({
-				title: event.summary,
-				startDate: startDate.format("x")
-				});
+				if (eventList.length === 0) {		
+				      eventList.push({
+                            title: event.summary,
+                            startDate: startDate.format("x")
+                        });				
+				}
+//				console.log("Length of eventList = " + eventList.length);
+				var exists = 0;
+				for(var j = 0; j < eventList.length; j++) {
+				//	console.log("eventList[j]: " + eventList[j].title);
+				//	console.log("eventList type " + typeof(eventList[j].title));
+				//	console.log("event.summary: " + event.summary);
+				//	console.log("event.sum type: " + typeof(event.summary));
+					if (eventList[j].title === event.summary) {
+//						console.log("not equal");
+						exists = 1;
+						//eventList.push({
+						//	title: event.summary,
+						//	startDate: startDate.format("x")
+						//});
+					
+					}
+				}
+				if (exists == 0) {
+					eventList.push({
+						title: event.summary,
+						startDate: startDate.format("x")
+					});				
+				}
 	  		}
 			console.log(eventList);
 		}

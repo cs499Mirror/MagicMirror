@@ -14,7 +14,7 @@ var moment = require("moment");
 var google = require('googleapis');   // Required for google calendar api calls
 var promise = require('promise');
 var calendar = google.calendar('v3');
-var quickstart = require('./quickstart/quickstart.js');
+//var quickstart = require('./quickstart/quickstart.js');
 
 // Google Oauth token
 var auth = {};
@@ -79,16 +79,31 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
 			// var quickstartComplete = promise.resolve(quickstart);
 //			var eventHolder = quickstart;
 //			console.log("eventHolder....\n");
-			console.log(eventHolder);
+//			console.log(eventHolder);
 //			var eventHolder = quickstart.then(function(result) {
-			var eventHolder = quickstart;
-			eventHolder.done(function(result) {
+			var arg = "no";
+			var quickstart = require('./quickstart/quickstart.js')(arg, function() {
+				//var eventHolder = quickstart;
+				//self.broadcastEvents();
+//				if (quickstart === 'undefined') {
+//					arg = "no";
+//				} else {
+					arg = "yes";
+					console.log("RETRIEVED EVENTS IN FETCHER");
+					events = quickstart;
+					self.broadcastEvents();
+					scheduleTimer();
+//				}
+			});
+			self.broadcastEvents();
+
+/*			eventHolder.done(function(result) {
 				events = result;
 				console.log(events); // Debugging
 				self.broadcastEvents();
 				scheduleTimer();
 			});
-
+*/
 			//listEvents(auth);
 //			console.log('number of events in gcal: ' + eventList.length());
 			console.log("here are events:\n");
