@@ -1,6 +1,6 @@
-# Module: Calendar
-The `calendar` module is one of the default modules of the MagicMirror.
-This module displays events from a public .ical calendar. It can combine multiple calendars.
+# Module: gCalendar
+The `gCalendar` module is a module developed by the Spring 2017 CS 499 Magic Mirror group.
+This module displays events from a public .ical calendar (the default calendar) as well as a user's private Google Calendar. 
 
 ## Using the module
 
