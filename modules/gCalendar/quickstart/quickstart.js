@@ -203,9 +203,11 @@ function listEvents(auth) {
 				var event = events[i];
 				var start = event.start.dateTime || event.start.date;
 				var startDate = moment(new Date(start));
+                var end = event.end.dateTime || event.end.date;
+                var endDate = moment(new Date(end));
 				var now = moment(new Date());
 				console.log('%s - %s', start, event.summary);
-				var endDate = moment(startDate).add(1, "days");
+				//var endDate = moment(startDate).add(1, "days");
 				if (eventList.length === 0) {		
 					eventList.push({
 						title: event.summary,
@@ -213,24 +215,18 @@ function listEvents(auth) {
                 	  	endDate: endDate.format("x")
 					});				
 				}
-//				console.log("Length of eventList = " + eventList.length);
 				var exists = 0;
+				
+				// Check to see if current event is already in the 
+				// EventList array
 				for(var j = 0; j < eventList.length; j++) {
-				//	console.log("eventList[j]: " + eventList[j].title);
-				//	console.log("eventList type " + typeof(eventList[j].title));
-				//	console.log("event.summary: " + event.summary);
-				//	console.log("event.sum type: " + typeof(event.summary));
 					if (eventList[j].title === event.summary) {
 //						console.log("not equal");
 						exists = 1;
-						//eventList.push({
-						//	title: event.summary,
-						//	startDate: startDate.format("x")
-						//});
-					
 					}
 				}
-				if (exists == 0 && (startDate > now)) {
+				// If it's not in eventList, add it
+				if (exists == 0 && (endDate > now)) {
 					eventList.push({
 						title: event.summary,
 						startDate: startDate.format("x"),
@@ -241,5 +237,4 @@ function listEvents(auth) {
 			console.log(eventList);
 		}
 	});
-//  return eventList;
 }
