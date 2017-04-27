@@ -81,8 +81,8 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
 //			console.log("eventHolder....\n");
 //			console.log(eventHolder);
 //			var eventHolder = quickstart.then(function(result) {
-			var arg = "no";
-			var quickstart = require('./quickstart/quickstart.js')(arg, function() {
+		//	var arg = "no";
+			var quickstart = require('./quickstart/quickstart.js')( function(callback) {
 				//var eventHolder = quickstart;
 				//self.broadcastEvents();
 //				if (quickstart === 'undefined') {
@@ -90,7 +90,7 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
 //				} else {
 					arg = "yes";
 					console.log("RETRIEVED EVENTS IN FETCHER");
-					events = quickstart;
+					events = callback;
 					self.broadcastEvents();
 					scheduleTimer();
 //				}
@@ -107,7 +107,7 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
 			//listEvents(auth);
 //			console.log('number of events in gcal: ' + eventList.length());
 			console.log("here are events:\n");
-//			console.log(events);
+			console.log(events);
 //			self.broadcastEvents();
 			scheduleTimer();
 			console.log("retrieved gCal events");

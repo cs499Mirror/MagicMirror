@@ -44,7 +44,7 @@ console.log('now in quickstart.js');
 //module.exports = function(){
   // Load client secrets from a local file.
 
-module.exports = function(arg, callback) {
+module.exports = function(callback) {
 	
 //	if(arg === "no") {
 		fs.readFile('modules/gCalendar/quickstart/client_secret.json', function processClientSecrets(err, content) {
@@ -61,7 +61,8 @@ module.exports = function(arg, callback) {
 //		if(eventList != 'undefined') {	
 			console.log("RETURNED FROM QUICKSTART");
 //			module.exports = eventList;
-			return module.exports;
+		//	return module.exports;
+			callback(eventList);
 //		}
 //	}
 
