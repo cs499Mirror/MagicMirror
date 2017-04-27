@@ -121,22 +121,22 @@ function getNewToken(oauth2Client, callback) {
 		access_type: 'offline',
 		scope: SCOPES
 	});
-	console.log('Authorize this app by visiting this url: ', authUrl);
-	var rl = readline.createInterface({
-		input: process.stdin,
-		output: process.stdout
-	});
-	rl.question('Enter the code from that page here: ', function(code) {
-		rl.close();
-		oauth2Client.getToken(code, function(err, token) {
-			if (err) {
-			console.log('Error while trying to retrieve access token', err);
-			return;
-		}
-			oauth2Client.credentials = token;
-			storeToken(token);
-			callback(oauth2Client);
-		});
+	var token;
+	try {
+		token = fs.readFileSync("./auth.txt");
+	}
+	catch(err) {
+		console.log("Please create an \"auth.txt\" file in the main directory of Magic Mirror with the code given to you at this URL: ", authUrl);
+		return;
+	}
+	oauth2Client.getToken(token, function(err, token) {
+		if (err) {
+		console.log('Error while trying to retrieve access token', err);
+		return;
+	}
+		oauth2Client.credentials = token;
+		storeToken(token);
+		callback(oauth2Client);
 	});
 }
 
