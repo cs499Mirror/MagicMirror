@@ -121,14 +121,20 @@ function getNewToken(oauth2Client, callback) {
 		access_type: 'offline',
 		scope: SCOPES
 	});
+	
+	// Spr17 
 	var token;
 	try {
+		// Attempt to open user auth token.
 		token = fs.readFileSync("./auth.txt");
 	}
 	catch(err) {
-		console.log("Please create an \"auth.txt\" file in the main directory of Magic Mirror with the code given to you at this URL: ", authUrl);
+		// If the token could not be opened, give the user the URL to get a token to save.
+		console.log("Please create an \"auth.txt\" file in the main directory of Magic Mirror with the code given to you at this URL: \n", authUrl, 
+		"\nOnce you have created the file, either restart the Magic Mirror or wait the duration of the updateInterval specified in ./config/config.js.");
 		return;
 	}
+	// end Spr17
 	oauth2Client.getToken(token, function(err, token) {
 		if (err) {
 		console.log('Error while trying to retrieve access token', err);
