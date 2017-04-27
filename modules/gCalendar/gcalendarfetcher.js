@@ -91,11 +91,14 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
 					arg = "yes";
 					console.log("RETRIEVED EVENTS IN FETCHER");
 					events = callback;
-					self.broadcastEvents();
-					scheduleTimer();
+					setTimeout(function() {
+						self.broadcastEvents();
+						scheduleTimer();
+					}, 1000); // Needed to ensure the callback returns the events before
+							  // we call broadcastEvents().
+					
 //				}
 			});
-			self.broadcastEvents();
 
 /*			eventHolder.done(function(result) {
 				events = result;
