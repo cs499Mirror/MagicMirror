@@ -39,17 +39,6 @@ console.log('now in quickstart.js');
  * as we thought it would at the moment...still investigating
 */
 
-<<<<<<< HEAD
-var eventList = [];
-
-console.log('now in quickstart.js');
-
-// Load client secrets from a local file.
-fs.readFile('modules/gCalendar/quickstart/client_secret.json', function processClientSecrets(err, content) {
-  if (err) {
-    console.log('Error loading client secret file: ' + err);
-    return;
-=======
 // Should stop until promise is resolved?
 //module.exports = function(){
   // Load client secrets from a local file.
@@ -90,7 +79,6 @@ module.exports = function(callback) {
     // Print out the error message
     // List of events will be empty
     reject(Error("Calendar not retrieved.\n"));
->>>>>>> callback
   }
 }*/
 
@@ -180,41 +168,6 @@ function storeToken(token) {
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
 function listEvents(auth) {
-<<<<<<< HEAD
-  var calendar = google.calendar('v3');
-  calendar.events.list({
-    auth: auth,
-    calendarId: 'primary',
-    timeMin: (new Date()).toISOString(),
-    maxResults: 10,
-    singleEvents: true,
-    orderBy: 'startTime',
-  }, function(err, response) {
-    if (err) {
-      console.log('The API returned an error: ' + err);
-      return;
-    }
-    var events = response.items;
-    if (events.length == 0) {
-      console.log('No upcoming events found.');
-    } else {
-      console.log('Upcoming 10 events:');
-    	console.log('now in quickstart...');  
-	for (var i = 0; i < events.length; i++) {
-        var event = events[i];
-        var start = event.start.dateTime || event.start.date;
-		var startDate = moment(new Date(start));
-		console.log('%s - %s', start, event.summary);
-        eventList.push({
-			title: event.summary,
-			startDate: startDate.format("x")
-		});
-	  }
-		console.log(eventList);
-    }
-  });
-//  return eventList;
-=======
 	var calendar = google.calendar('v3');
 	calendar.events.list({
 		auth: auth,
@@ -308,6 +261,5 @@ function listEvents(auth) {
 //			console.log(eventList);
 		}
 	});
->>>>>>> callback
 }
 module.exports = eventList;

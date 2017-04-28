@@ -40,10 +40,7 @@ Module.register("gCalendar", {
 			},
 			{
 				symbol: "calendar",
-<<<<<<< HEAD
-=======
 				// This url must be present for Google Calendar to be tracked
->>>>>>> callback
 				url: "https://www.googleapis.com/auth/calendar"
 			}
 		],
