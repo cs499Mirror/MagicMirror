@@ -12,7 +12,6 @@
 var ical = require("./vendor/ical.js");
 var moment = require("moment");
 var google = require('googleapis');   // Required for google calendar api calls
-var promise = require('promise');
 var calendar = google.calendar('v3');
 //var quickstart = require('./quickstart/quickstart.js');
 
@@ -88,15 +87,18 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
 //				if (quickstart === 'undefined') {
 //					arg = "no";
 //				} else {
-					arg = "yes";
-					console.log("RETRIEVED EVENTS IN FETCHER");
 					events = callback;
-					setTimeout(function() {
-						self.broadcastEvents();
-						scheduleTimer();
-					}, 1000); // Needed to ensure the callback returns the events before
-							  // we call broadcastEvents().
-					
+					console.log("RETRIEVED EVENTS IN FETCHER: \n" + events);
+					console.log(events.length)
+					// Define a recursive function to test every .1 seconds if the 
+					// above events = callback has completed yet.
+					setTimeout(function wait() {
+						if( events.length !== 0 ) {
+							self.broadcastEvents();
+							scheduleTimer();
+						} else setTimeout(wait, 100);
+						
+					}, 100); 
 //				}
 			});
 
@@ -292,7 +294,7 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
 		fetchCalendar();
 	};
 
-	/* broadcastItems()
+	/* broadcastEvents()
 	 * Broadcast the existing events.
 	 */
 	this.broadcastEvents = function() {
