@@ -24,7 +24,7 @@ Module.register("gCalendar", {
 		maxTitleLength: 25,
 
 	// Changed interval to one minute from 5 min .... 5 * 60 * 100, *.025 for 3 seconds...
-		fetchInterval: 5 * 60 * 1000, // Update every 3 seconds.
+		fetchInterval: .025 * 60 * 1000, // Update every 3 seconds.
 		animationSpeed: 2000,
 		fade: true,
 		urgency: 7,

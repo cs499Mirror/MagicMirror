@@ -197,9 +197,13 @@ function listEvents(auth) {
 			 * in order for proper broadcasting
 			*/
 
-  //  	console.log('now in quickstart...');  
+			// Keep track of events that were just pulled
+			// Events in the eventsList that aren't here have
+			// been deleted and should be removed
+			var newEvents = [];
 			for (var i = 0; i < events.length; i++) {
 				var event = events[i];
+				newEvents.push(event.summary);
 				var start = event.start.dateTime || event.start.date;
 				var startDate = moment(new Date(start));
                 var end = event.end.dateTime || event.end.date;
@@ -233,7 +237,28 @@ function listEvents(auth) {
 					});				
 				}
 	  		}
-			console.log(eventList);
+			console.log("before delete: " + eventList.length);
+			// eventList has been built. Now we need to go back through
+			// and remove any events that no longer exist in newEvents
+			for (var i = eventList.length - 1; i >= 0; i--) {
+				var removed = 0;
+				for (var j = 0; j < newEvents.length; j++) {
+					if(eventList[i].title === newEvents[j]) removed = 1;
+				}
+				if (removed === 0) {
+					delete eventList[i];
+					console.log("after delete: " +eventList.length)
+				//	delete eventList[i]["title"];
+				//	delete eventList[i]["startDate"];
+				//	delete eventList[i]["endDate"];	
+				/*	eventList.title.splice(i,1);
+					eventList.startDate.splice(i,1);
+					eventList.endDate.splice(i,1);
+				*/
+				}				
+			}	
+			eventList = eventList.filter(Boolean);
+//			console.log(eventList);
 		}
 	});
 }
