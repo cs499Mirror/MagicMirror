@@ -5,6 +5,10 @@
  *
  * By Michael Teeuw http://michaelteeuw.nl
  * MIT Licensed.
+ *
+ * CS499 Spr17 - Added Calendar for Google private Calendar
+ * 
+ *
  */
 
 Module.register("gCalendar", {
@@ -18,7 +22,9 @@ Module.register("gCalendar", {
 		displayRepeatingCountTitle: false,
 		defaultRepeatingCountTitle: "",
 		maxTitleLength: 25,
-		fetchInterval: 5 * 60 * 1000, // Update every 5 minutes.
+
+	// Changed interval to one minute from 5 min .... 5 * 60 * 100, *.025 for 3 seconds...
+		fetchInterval: .025 * 60 * 1000, // Update every 3 seconds.
 		animationSpeed: 2000,
 		fade: true,
 		urgency: 7,
@@ -34,6 +40,10 @@ Module.register("gCalendar", {
 			},
 			{
 				symbol: "calendar",
+<<<<<<< HEAD
+=======
+				// This url must be present for Google Calendar to be tracked
+>>>>>>> callback
 				url: "https://www.googleapis.com/auth/calendar"
 			}
 		],
@@ -302,6 +312,13 @@ Module.register("gCalendar", {
 	 *
 	 * argument url sting - Url to add.
 	 */
+	
+	/*
+	 * Spr17 - When Check if Google URL is present in config
+	 * and Calendar list at top of this script
+	 * if so, send socket notification to begin fetching calendar
+	 */
+
 	addCalendar: function (url, user, pass) {
 		if (url === "https://www.googleapis.com/auth/calendar")
 			this.sendSocketNotification("ADD_GOOGLECAL", {

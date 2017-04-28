@@ -3,10 +3,15 @@
  *
  * By Michael Teeuw http://michaelteeuw.nl
  * MIT Licensed.
+ *
+ * CS499 Spr17 - Added a Google Calendar fetcher
+ * in addition to default ICal fetcher - will fetch when 
+ * Google URL is in config file and gCalendar.js calendar list
  */
 
 var ical = require("./vendor/ical.js");
 var moment = require("moment");
+<<<<<<< HEAD
 var fs = require('fs');
 var readline = require('readline');
 var google = require('googleapis');              // Required for google calendar api calls
@@ -19,6 +24,11 @@ var SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
 var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
     process.env.USERPROFILE) + '/.credentials/';
 var TOKEN_PATH = TOKEN_DIR + 'calendar-nodejs-quickstart.json';
+=======
+var google = require('googleapis');   // Required for google calendar api calls
+var calendar = google.calendar('v3');
+//var quickstart = require('./quickstart/quickstart.js');
+>>>>>>> callback
 
 // Google Oauth token
 var auth = {};
@@ -56,15 +66,22 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
 			}
 		}
 	
+<<<<<<< HEAD
 	/* NEED TO ADD IF === 'https://www.googleapis.com/auth/calendar' else do below.  If it is
     *  THE GOOGLE CAL, CALL QUICKSTART, RETURN EVENTS AND PARSE AND PUT INTO FORMAT USED
 	*  IN gCalendar.js  -jcg
+=======
+	/* 
+    *  Spr17 - If current calendar is a Google calendar, call quickstart.js
+	*  and retrieve events and broadcast
+>>>>>>> callback
 	*/
 		console.log(url);
 		if (url === 'https://www.googleapis.com/auth/calendar') {
 			console.log("..in gcalendarfetcher, here's current cal");
 			console.log("google calendar events:");
 			var calendar = google.calendar('v3');
+<<<<<<< HEAD
 //			getEvents(quickstart, function(callback) {
 //				events = quickstart;
 //			});
@@ -86,6 +103,62 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
 				//console.log(data);
 				newEvents = [];
 
+=======
+
+			/*
+			 * Currently having an issue retrieving events from 
+			 * quickstart. Events are not being returned
+			 * before calendar is first broadcast, but will
+			 * be broadcast after first rebroadcast interval
+			 * has passed (default 5 min). Still investigating...
+			 */
+
+
+
+//			getEvents(quickstart, function(callback) {
+//				events = quickstart;
+//			});
+			//@INVESTIGATE
+			// var quickstartComplete = promise.resolve(quickstart);
+//			var eventHolder = quickstart;
+//			console.log("eventHolder....\n");
+//			console.log(eventHolder);
+//			var eventHolder = quickstart.then(function(result) {
+		//	var arg = "no";
+			var quickstart = require('./quickstart/quickstart.js')( function(callback) {
+				events = callback;
+				console.log("RETRIEVED EVENTS IN FETCHER: \n" + events);
+				console.log(events.length)
+				
+				// Define a recursive function to test every .1 seconds if the 
+				// above events = callback has completed yet.
+				setTimeout(function wait() {
+					if( events.length !== 0 ) {
+						self.broadcastEvents();
+						scheduleTimer();
+					} else setTimeout(wait, 100);	
+					}, 100); 
+			});
+
+			//listEvents(auth);
+//			console.log('number of events in gcal: ' + eventList.length());
+			console.log("here are events:\n");
+			console.log(events);
+//			self.broadcastEvents();
+			scheduleTimer();
+			console.log("retrieved gCal events");
+
+		} else {
+			ical.fromURL(url, opts, function(err, data) {
+				if (err) {
+					fetchFailedCallback(self, err);
+					scheduleTimer();
+					return;
+				}
+				//console.log(data);
+				newEvents = [];
+
+>>>>>>> callback
 				var limitFunction = function(date, i) {return i < maximumEntries;};
 
 				for (var e in data) {
@@ -253,7 +326,7 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
 		fetchCalendar();
 	};
 
-	/* broadcastItems()
+	/* broadcastEvents()
 	 * Broadcast the existing events.
 	 */
 	this.broadcastEvents = function() {

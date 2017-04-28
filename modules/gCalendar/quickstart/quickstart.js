@@ -1,3 +1,18 @@
+/*
+ * CS499 Spr17 - quickstart.js is a script provided by Google
+ * Calendar documentation here:
+ * https://developers.google.com/google-apps/calendar/quickstart/nodejs
+ *
+ * quickstart interacts with the google API and google auth api
+ * to handle Oauth token maintenence as well as retrieving the 
+ * list of events. Upon successful return, a dictionary of events is
+ * created to be returned to gcalendarfetcher.js with the proper names
+ * and time in order for them to be successfully broadcast
+ *
+*/
+
+
+
 var fs = require('fs');
 var readline = require('readline');
 var google = require('googleapis');
@@ -10,7 +25,21 @@ var SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
 var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
     process.env.USERPROFILE) + '/.credentials/';
 var TOKEN_PATH = TOKEN_DIR + 'calendar-nodejs-quickstart.json';
+var eventList = [];
+console.log('now in quickstart.js');
 
+/*
+ * Spr17 - Google events not retrieved before initial broadcast of 
+ * calendar events, so only ICal events are being shown in first
+ * interval, but they are successfully displayed during the succeeding
+ * intervals. We are currently working with promises to overcome
+ * this problem, but have not yet found a solution. This is the promise
+ * routine we are currently using, which SHOULD make the calendar fetcher
+ * halt until successfully retrieving Google events - this is not working
+ * as we thought it would at the moment...still investigating
+*/
+
+<<<<<<< HEAD
 var eventList = [];
 
 console.log('now in quickstart.js');
@@ -20,11 +49,50 @@ fs.readFile('modules/gCalendar/quickstart/client_secret.json', function processC
   if (err) {
     console.log('Error loading client secret file: ' + err);
     return;
+=======
+// Should stop until promise is resolved?
+//module.exports = function(){
+  // Load client secrets from a local file.
+
+module.exports = function(callback) {
+	
+//	if(arg === "no") {
+		fs.readFile('modules/gCalendar/quickstart/client_secret.json', function processClientSecrets(err, content) {
+			if (err) {
+				console.log('Error loading client secret file: ' + err);
+				return;
+			}
+    	// Authorize a client with the loaded credentials, then call the
+    	// Google Calendar API.
+			authorize(JSON.parse(content), listEvents);
+		});
+//	}
+//	else {	
+//		if(eventList != 'undefined') {	
+			console.log("RETURNED FROM QUICKSTART");
+//			module.exports = eventList;
+		//	return module.exports;
+			callback(eventList);
+//		}
+//	}
+
+}
+	// Getting through this conditional with eventList = []
+	// Should check if the list is empty or not
+	// Will resolve and return the given value for eventList
+/*	if(eventList !== []){
+		console.log("Value for eventList follows."); //Debugging
+		console.log(eventList); //Debugging
+		console.log("eventList !== []"); // Debugging
+		resolve(eventList);
+	}
+  else {
+    // Print out the error message
+    // List of events will be empty
+    reject(Error("Calendar not retrieved.\n"));
+>>>>>>> callback
   }
-  // Authorize a client with the loaded credentials, then call the
-  // Google Calendar API.
-  authorize(JSON.parse(content), listEvents);
-});
+}*/
 
 /**
  * Create an OAuth2 client with the given credentials, and then execute the
@@ -34,21 +102,21 @@ fs.readFile('modules/gCalendar/quickstart/client_secret.json', function processC
  * @param {function} callback The callback to call with the authorized client.
  */
 function authorize(credentials, callback) {
-  var clientSecret = credentials.installed.client_secret;
-  var clientId = credentials.installed.client_id;
-  var redirectUrl = credentials.installed.redirect_uris[0];
-  var auth = new googleAuth();
-  var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
+	var clientSecret = credentials.installed.client_secret;
+	var clientId = credentials.installed.client_id;
+	var redirectUrl = credentials.installed.redirect_uris[0];
+	var auth = new googleAuth();
+	var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
 
   // Check if we have previously stored a token.
-  fs.readFile(TOKEN_PATH, function(err, token) {
-    if (err) {
-      getNewToken(oauth2Client, callback);
-    } else {
-      oauth2Client.credentials = JSON.parse(token);
-      callback(oauth2Client);
-    }
-  });
+	fs.readFile(TOKEN_PATH, function(err, token) {
+		if (err) {
+			getNewToken(oauth2Client, callback);
+		} else {
+			oauth2Client.credentials = JSON.parse(token);
+			callback(oauth2Client);
+		}
+	});
 }
 
 /**
@@ -60,27 +128,33 @@ function authorize(credentials, callback) {
  *     client.
  */
 function getNewToken(oauth2Client, callback) {
-  var authUrl = oauth2Client.generateAuthUrl({
-    access_type: 'offline',
-    scope: SCOPES
-  });
-  console.log('Authorize this app by visiting this url: ', authUrl);
-  var rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
-  rl.question('Enter the code from that page here: ', function(code) {
-    rl.close();
-    oauth2Client.getToken(code, function(err, token) {
-      if (err) {
-        console.log('Error while trying to retrieve access token', err);
-        return;
-      }
-      oauth2Client.credentials = token;
-      storeToken(token);
-      callback(oauth2Client);
-    });
-  });
+	var authUrl = oauth2Client.generateAuthUrl({
+		access_type: 'offline',
+		scope: SCOPES
+	});
+	
+	// Spr17 
+	var token;
+	try {
+		// Attempt to open user auth token.
+		token = fs.readFileSync("./auth.txt");
+	}
+	catch(err) {
+		// If the token could not be opened, give the user the URL to get a token to save.
+		console.log("Please create an \"auth.txt\" file in the main directory of Magic Mirror with the code given to you at this URL: \n", authUrl, 
+		"\nOnce you have created the file, either restart the Magic Mirror or wait the duration of the updateInterval specified in ./config/config.js.");
+		return;
+	}
+	// end Spr17
+	oauth2Client.getToken(token, function(err, token) {
+		if (err) {
+		console.log('Error while trying to retrieve access token', err);
+		return;
+	}
+		oauth2Client.credentials = token;
+		storeToken(token);
+		callback(oauth2Client);
+	});
 }
 
 /**
@@ -89,15 +163,15 @@ function getNewToken(oauth2Client, callback) {
  * @param {Object} token The token to store to disk.
  */
 function storeToken(token) {
-  try {
-    fs.mkdirSync(TOKEN_DIR);
-  } catch (err) {
-    if (err.code != 'EEXIST') {
-      throw err;
-    }
-  }
-  fs.writeFile(TOKEN_PATH, JSON.stringify(token));
-  console.log('Token stored to ' + TOKEN_PATH);
+	try {
+		fs.mkdirSync(TOKEN_DIR);
+	} catch (err) {
+		if (err.code != 'EEXIST') {
+			throw err;
+		}
+	}
+	fs.writeFile(TOKEN_PATH, JSON.stringify(token));
+	console.log('Token stored to ' + TOKEN_PATH);
 }
 
 /**
@@ -106,6 +180,7 @@ function storeToken(token) {
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
 function listEvents(auth) {
+<<<<<<< HEAD
   var calendar = google.calendar('v3');
   calendar.events.list({
     auth: auth,
@@ -139,5 +214,100 @@ function listEvents(auth) {
     }
   });
 //  return eventList;
+=======
+	var calendar = google.calendar('v3');
+	calendar.events.list({
+		auth: auth,
+		calendarId: 'primary',
+		timeMin: (new Date()).toISOString(),
+		maxResults: 10,
+		singleEvents: true,
+		orderBy: 'startTime',
+	}, function(err, response) {
+		if (err) {
+			console.log('The API returned an error: ' + err);
+			return;
+		}
+		var events = response.items;
+		if (events.length == 0) {
+			console.log('No upcoming events found.');
+		} else {
+			console.log('Upcoming 10 events:');
+    	console.log('now in quickstart...');  
+		
+			/*
+			 * Spr17 - convert returned Google events into
+			 * the format (a dictionary with keys named
+			 * "summary" for the event name and "startDate" for the
+			 * starting time of the event, converted to "moment" time)
+ 	   		 * expected by the calendar fetcher
+			 * in order for proper broadcasting
+			*/
+
+			// Keep track of events that were just pulled
+			// Events in the eventsList that aren't here have
+			// been deleted and should be removed
+			var newEvents = [];
+			for (var i = 0; i < events.length; i++) {
+				var event = events[i];
+				newEvents.push(event.summary);
+				var start = event.start.dateTime || event.start.date;
+				var startDate = moment(new Date(start));
+                var end = event.end.dateTime || event.end.date;
+                var endDate = moment(new Date(end));
+				var now = moment(new Date());
+				console.log('%s - %s', start, event.summary);
+				//var endDate = moment(startDate).add(1, "days");
+				if (eventList.length === 0) {		
+					eventList.push({
+						title: event.summary,
+                        startDate: startDate.format("x"),
+                	  	endDate: endDate.format("x")
+					});				
+				}
+				var exists = 0;
+				
+				// Check to see if current event is already in the 
+				// EventList array
+				for(var j = 0; j < eventList.length; j++) {
+					if (eventList[j].title === event.summary) {
+//						console.log("not equal");
+						exists = 1;
+					}
+				}
+				// If it's not in eventList, add it
+				if (exists == 0 && (endDate > now)) {
+					eventList.push({
+						title: event.summary,
+						startDate: startDate.format("x"),
+	        			endDate: endDate.format("x")
+					});				
+				}
+	  		}
+			console.log("before delete: " + eventList.length);
+			// eventList has been built. Now we need to go back through
+			// and remove any events that no longer exist in newEvents
+			for (var i = eventList.length - 1; i >= 0; i--) {
+				var removed = 0;
+				for (var j = 0; j < newEvents.length; j++) {
+					if(eventList[i].title === newEvents[j]) removed = 1;
+				}
+				if (removed === 0) {
+					delete eventList[i];
+					console.log("after delete: " +eventList.length)
+				//	delete eventList[i]["title"];
+				//	delete eventList[i]["startDate"];
+				//	delete eventList[i]["endDate"];	
+				/*	eventList.title.splice(i,1);
+					eventList.startDate.splice(i,1);
+					eventList.endDate.splice(i,1);
+				*/
+				}				
+			}	
+			eventList = eventList.filter(Boolean);
+//			console.log(eventList);
+		}
+	});
+>>>>>>> callback
 }
 module.exports = eventList;

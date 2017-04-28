@@ -3,6 +3,10 @@
  *
  * By Michael Teeuw http://michaelteeuw.nl
  * MIT Licensed.
+ *
+ * CS499 Spr17 - this node_helper receives the socket notification
+ * and creates the different fetchers - one for ICal calendars
+ * and another for google calendars 
  */
 
 var NodeHelper = require("node_helper");
@@ -28,10 +32,17 @@ module.exports = NodeHelper.create({
 			//console.log('ADD_CALENDAR: ');
 			this.createFetcher(payload.url, payload.fetchInterval, payload.maximumEntries, payload.maximumNumberOfDays, payload.user, payload.pass);
 		}
+<<<<<<< HEAD
 		else if (notification === "ADD_GOOGLECAL") {
 			console.log('ADD_GOOGLECAL in node_helper\n');
 			this.createFetcher(payload.url, payload.fetchInterval, payload.maximumEntries, payload.maximumNumberOfDays, payload.user, payload.pass);
 //			quickstart;
+=======
+		// Spr17 - create a google calendar fetcher
+		else if (notification === "ADD_GOOGLECAL") {
+			console.log('ADD_GOOGLECAL in node_helper\n');
+			this.createFetcher(payload.url, payload.fetchInterval, payload.maximumEntries, payload.maximumNumberOfDays, payload.user, payload.pass);
+>>>>>>> callback
 		}
 	},
 
@@ -57,6 +68,7 @@ module.exports = NodeHelper.create({
 			fetcher = new CalendarFetcher(url, fetchInterval, maximumEntries, maximumNumberOfDays, user, pass);
 
 			fetcher.onReceive(function(fetcher) {
+<<<<<<< HEAD
 				//console.log('Broadcast events.');
 				//console.log(fetcher.events());
 
@@ -70,6 +82,12 @@ module.exports = NodeHelper.create({
 						url: fetcher.url(),
 						events: fetcher.events()
 					});
+=======
+				self.sendSocketNotification("CALENDAR_EVENTS", {
+					url: fetcher.url(),
+					events: fetcher.events()
+				});
+>>>>>>> callback
 			});
 
 			fetcher.onError(function(fetcher, error) {

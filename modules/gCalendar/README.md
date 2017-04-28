@@ -1,19 +1,38 @@
-# Module: Calendar
-The `calendar` module is one of the default modules of the MagicMirror.
-This module displays events from a public .ical calendar. It can combine multiple calendars.
+# Module: gCalendar
+The `gCalendar` module is expanding upon the default calendar module of the MagicMirror.
+This module displays events from a public .ical calendar. It also allows a user to have their private Google Calendar events pulled and merged to the pre-existing .ical calendar events.
 
 ## Using the module
+First, the user should visit the Google Calendar API Node.js quickstart (https://developers.google.com/google-apps/calendar/quickstart/nodejs) and complete steps 1 and 2. 
 
-To use this module, add it to the modules array in the `config/config.js` file:
+Step 2 will have the user sign into their account and retrieve a file called `client_secret.json`. Put this file in `modules/gCalendar/quickstart/client_secret.js`.
+
+Step 2 will have the user install the Google API library and the Google Auth library. 
+
+
+In the config folder there is a file named `config.js.sample` in the config folder. Just copy this file to a file named `config.js`, also in the config folder, otherwise Magic Mirror will not launch. 
+
+The default `config/config.js` gCalendar file should appear like this:
 ````javascript
 modules: [
 	{
-		module: 'calendar',
+		module: 'gCalendar',
+		header: 'Private Calendar',
 		position: 'top_left',	// This can be any of the regions. Best results in left or right regions.
 		config: {
-			// The config property is optional.
-			// If no config is set, an example calendar is shown.
-			// See 'Configuration options' for more information.
+                    	calendars: 
+			[
+				{
+					// This is the default .ical Calendar
+                        		symbol: 'calendar-check-o ',
+                        		url: 'webcal://www.calendarlabs.com/templates/ical/US-Holidays.ics'
+                    		},
+                    		{
+					// This is what is used to fetch the user's Google calendar
+                        		symbol: 'caldendar-check-o ',
+                        		url: 'https://www.googleapis.com/auth/calendar'
+                    		}
+			]	
 		}
 	}
 ]
