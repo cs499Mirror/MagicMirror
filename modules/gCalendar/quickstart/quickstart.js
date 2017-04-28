@@ -45,7 +45,6 @@ console.log('now in quickstart.js');
 
 module.exports = function(callback) {
 	
-//	if(arg === "no") {
 		fs.readFile('modules/gCalendar/quickstart/client_secret.json', function processClientSecrets(err, content) {
 			if (err) {
 				console.log('Error loading client secret file: ' + err);
@@ -55,32 +54,10 @@ module.exports = function(callback) {
     	// Google Calendar API.
 			authorize(JSON.parse(content), listEvents);
 		});
-//	}
-//	else {	
-//		if(eventList != 'undefined') {	
 			console.log("RETURNED FROM QUICKSTART");
-//			module.exports = eventList;
-		//	return module.exports;
 			callback(eventList);
-//		}
-//	}
 
 }
-	// Getting through this conditional with eventList = []
-	// Should check if the list is empty or not
-	// Will resolve and return the given value for eventList
-/*	if(eventList !== []){
-		console.log("Value for eventList follows."); //Debugging
-		console.log(eventList); //Debugging
-		console.log("eventList !== []"); // Debugging
-		resolve(eventList);
-	}
-  else {
-    // Print out the error message
-    // List of events will be empty
-    reject(Error("Calendar not retrieved.\n"));
-  }
-}*/
 
 /**
  * Create an OAuth2 client with the given credentials, and then execute the
@@ -224,7 +201,13 @@ function listEvents(auth) {
 				// EventList array
 				for(var j = 0; j < eventList.length; j++) {
 					if (eventList[j].title === event.summary) {
-//						console.log("not equal");
+						// Event is already in list, update startDate and endDate
+						start = event.start.dateTime || event.start.date;
+		                startDate = moment(new Date(start));
+        		        end = event.end.dateTime || event.end.date;
+               			endDate = moment(new Date(end));
+						eventList[j].startDate = startDate.format("x");
+						eventList[j].endDate = endDate.format("x");
 						exists = 1;
 					}
 				}
