@@ -23,7 +23,7 @@ Module.register("gCalendar", {
 		defaultRepeatingCountTitle: "",
 		maxTitleLength: 25,
 
-	// Changed interval to one minute from 5 min .... 5 * 60 * 100, *.025 for 3 seconds...
+		// Changed interval to one minute from 5 min .... 5 * 60 * 100, *.025 for 3 seconds...
 		fetchInterval: .025 * 60 * 1000, // Update every 3 seconds.
 		animationSpeed: 2000,
 		fade: true,
@@ -311,9 +311,10 @@ Module.register("gCalendar", {
 	 */
 	
 	/*
-	 * Spr17 - When Check if Google URL is present in config
-	 * and Calendar list at top of this script
-	 * if so, send socket notification to begin fetching calendar
+	 * Spr17 - Check if Google URL is present in config
+	 * and Calendar list at top of this script.
+	 * If so, send socket notification to begin fetching 
+	 * user's Google calendar
 	 */
 
 	addCalendar: function (url, user, pass) {

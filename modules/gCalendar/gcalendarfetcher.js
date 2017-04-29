@@ -13,10 +13,7 @@ var ical = require("./vendor/ical.js");
 var moment = require("moment");
 var google = require('googleapis');   // Required for google calendar api calls
 var calendar = google.calendar('v3');
-//var quickstart = require('./quickstart/quickstart.js');
 
-// Google Oauth token
-var auth = {};
 var events = [];
 
 var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumberOfDays, user, pass) {
@@ -62,25 +59,11 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
 			var calendar = google.calendar('v3');
 
 			/*
-			 * Currently having an issue retrieving events from 
-			 * quickstart. Events are not being returned
-			 * before calendar is first broadcast, but will
-			 * be broadcast after first rebroadcast interval
-			 * has passed (default 5 min). Still investigating...
+			 * quickstart calls the scripts that handles all Google API
+			 * related functions, including authorization, oauth token
+			 * maintenance, and building the dictionary of google
+			 * calendar events that will be broadcast
 			 */
-
-
-
-//			getEvents(quickstart, function(callback) {
-//				events = quickstart;
-//			});
-			//@INVESTIGATE
-			// var quickstartComplete = promise.resolve(quickstart);
-//			var eventHolder = quickstart;
-//			console.log("eventHolder....\n");
-//			console.log(eventHolder);
-//			var eventHolder = quickstart.then(function(result) {
-		//	var arg = "no";
 			var quickstart = require('./quickstart/quickstart.js')( function(callback) {
 				events = callback;
 				console.log("RETRIEVED EVENTS IN FETCHER: \n" + events);
@@ -96,11 +79,8 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
 					}, 100); 
 			});
 
-			//listEvents(auth);
-//			console.log('number of events in gcal: ' + eventList.length());
 			console.log("here are events:\n");
 			console.log(events);
-//			self.broadcastEvents();
 			scheduleTimer();
 			console.log("retrieved gCal events");
 

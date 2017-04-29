@@ -1,6 +1,6 @@
 /*
  * CS499 Spr17 - quickstart.js is a script provided by Google
- * Calendar documentation here:
+ * Calendar API documentation here:
  * https://developers.google.com/google-apps/calendar/quickstart/nodejs
  *
  * quickstart interacts with the google API and google auth api
@@ -28,20 +28,6 @@ var TOKEN_PATH = TOKEN_DIR + 'calendar-nodejs-quickstart.json';
 var eventList = [];
 console.log('now in quickstart.js');
 
-/*
- * Spr17 - Google events not retrieved before initial broadcast of 
- * calendar events, so only ICal events are being shown in first
- * interval, but they are successfully displayed during the succeeding
- * intervals. We are currently working with promises to overcome
- * this problem, but have not yet found a solution. This is the promise
- * routine we are currently using, which SHOULD make the calendar fetcher
- * halt until successfully retrieving Google events - this is not working
- * as we thought it would at the moment...still investigating
-*/
-
-// Should stop until promise is resolved?
-//module.exports = function(){
-  // Load client secrets from a local file.
 
 module.exports = function(callback) {
 	
@@ -169,7 +155,8 @@ function listEvents(auth) {
 			 * Spr17 - convert returned Google events into
 			 * the format (a dictionary with keys named
 			 * "summary" for the event name and "startDate" for the
-			 * starting time of the event, converted to "moment" time)
+			 * starting time of the event, "endDate" for the end
+			 * of the event, converted to "moment" time)
  	   		 * expected by the calendar fetcher
 			 * in order for proper broadcasting
 			*/
@@ -178,6 +165,8 @@ function listEvents(auth) {
 			// Events in the eventsList that aren't here have
 			// been deleted and should be removed
 			var newEvents = [];
+			
+
 			for (var i = 0; i < events.length; i++) {
 				var event = events[i];
 				newEvents.push(event.summary);
@@ -198,7 +187,9 @@ function listEvents(auth) {
 				var exists = 0;
 				
 				// Check to see if current event is already in the 
-				// EventList array
+				// EventList array. If so, set the exists flag
+				// and update the start time and end time in case
+				// they have changed
 				for(var j = 0; j < eventList.length; j++) {
 					if (eventList[j].title === event.summary) {
 						// Event is already in list, update startDate and endDate
@@ -231,17 +222,12 @@ function listEvents(auth) {
 				if (removed === 0) {
 					delete eventList[i];
 					console.log("after delete: " +eventList.length)
-				//	delete eventList[i]["title"];
-				//	delete eventList[i]["startDate"];
-				//	delete eventList[i]["endDate"];	
-				/*	eventList.title.splice(i,1);
-					eventList.startDate.splice(i,1);
-					eventList.endDate.splice(i,1);
-				*/
 				}				
 			}	
+			// If anything was removed from eventList
+			// clear any 'undefined' elements for proper
+			// broadcasting
 			eventList = eventList.filter(Boolean);
-//			console.log(eventList);
 		}
 	});
 }
