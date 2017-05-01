@@ -40,7 +40,11 @@ modules: [
 		}
 	}
 ]
-````
+```
+Once the config file is in place, the google api and google auth libraries are installed, and you have placed your client_secret.json file in `modules/gCalendar/quickstart/`, start the Magic Mirror from its root directory. 
+
+When first launching the module, you will see in the console a url. Copy and paste that into your browser, log in to your Google account using your username and password, and copy the code given an place that into a file named `auth.txt` in your Magic Mirror root folder. Then restart Magic Mirror or wait for the interval period to elapse and your Google Calendar will be pulled.
+
 
 ## Configuration options
 
