@@ -17,7 +17,7 @@ Step 2 will have the user install the Google API library and the Google Auth lib
 From your Magic Mirror root directory there is a file named `config/config.js.sample`. Copy this file to a file named `config.js`, also in the config folder, otherwise Magic Mirror will not launch correctly. 
 
 The default `config/config.js` gCalendar file should appear like this:
-````javascript
+```javascript
 modules: [
 	{
 		module: 'gCalendar',
