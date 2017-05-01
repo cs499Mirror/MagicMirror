@@ -7,6 +7,10 @@ First, the user should visit the Google Calendar API Node.js quickstart (https:/
 
 Step 2 will have the user sign into their account and retrieve a file called `client_secret.json`. Put this file in `modules/gCalendar/quickstart/client_secret.js`.
 
+**NOTE** on subsequent uses, if you create a different client_secret.js file, you will need to remove the old credentials file located in
+`~/.credentials/calendar-nodejs-quickstart.json`, otherwise you will receive an 'unauthorized_client' error
+
+
 Step 2 will have the user install the Google API library and the Google Auth library. 
 
 
