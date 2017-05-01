@@ -1,11 +1,11 @@
 # Module: gCalendar
 The `gCalendar` module is expanding upon the default calendar module of the MagicMirror.
-This module displays events from a public .ical calendar. It also allows a user to have their private Google Calendar events pulled and merged to the pre-existing .ical calendar events.
+This module displays events from a public .ical calendar as well as allowing a user to have their private Google Calendar events pulled and merged to the pre-existing .ical calendar events.
 
 ## Using the module
 First, the user should visit the Google Calendar API Node.js quickstart (https://developers.google.com/google-apps/calendar/quickstart/nodejs) and complete steps 1 and 2. 
 
-Step 2 will have the user sign into their account and retrieve a file called `client_secret.json`. Put this file in `modules/gCalendar/quickstart/client_secret.js`.
+Step 1 will have the user sign into the Google API Console and retrieve a file called `client_secret.json`. Put this file in `modules/gCalendar/quickstart/client_secret.js`.
 
 **NOTE** on subsequent uses, if you create a different client_secret.js file, you will need to remove the old credentials file located in
 `~/.credentials/calendar-nodejs-quickstart.json`, otherwise you will receive an 'unauthorized_client' error
@@ -14,7 +14,7 @@ Step 2 will have the user sign into their account and retrieve a file called `cl
 Step 2 will have the user install the Google API library and the Google Auth library. 
 
 
-In the config folder there is a file named `config.js.sample` in the config folder. Just copy this file to a file named `config.js`, also in the config folder, otherwise Magic Mirror will not launch. 
+From your Magic Mirror root directory there is a file named `config/config.js.sample`. Copy this file to a file named `config.js`, also in the config folder, otherwise Magic Mirror will not launch correctly. 
 
 The default `config/config.js` gCalendar file should appear like this:
 ````javascript
