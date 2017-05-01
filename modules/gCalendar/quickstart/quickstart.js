@@ -30,7 +30,7 @@ console.log('now in quickstart.js');
 
 
 module.exports = function(callback) {
-	
+
 		fs.readFile('modules/gCalendar/quickstart/client_secret.json', function processClientSecrets(err, content) {
 			if (err) {
 				console.log('Error loading client secret file: ' + err);
@@ -59,15 +59,69 @@ function authorize(credentials, callback) {
 	var auth = new googleAuth();
 	var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
 
+    var authUrl = oauth2Client.generateAuthUrl({
+        access_type: 'offline',
+        scope: SCOPES
+    });
+
   // Check if we have previously stored a token.
-	fs.readFile(TOKEN_PATH, function(err, token) {
+	fs.readFileSync(TOKEN_PATH, function(err, token) {
 		if (err) {
-			getNewToken(oauth2Client, callback);
+			if (fs.existsSync('/modules/gCalendar/quickstart/first.txt')) {
+				promptForCode(authUrl);
+				fs.unlink('/modules/gCalendar/quickstart/first.txt');
+			}
+			else if (fs.existsSync('./auth.txt')) {
+    			login(oauth2Client, callback);
+				fs.unlink('./auth.txt');
+			}
+			else {
+				getNewToken(oauth2Client, callback);
+			}
 		} else {
-			oauth2Client.credentials = JSON.parse(token);
+			oauth2Client.credentials = token;
 			callback(oauth2Client);
 		}
 	});
+}
+
+function promptForCode(authUrl) {
+
+	        // If the token could not be opened, give the user the URL to get a token to save.
+        console.log("Please create an \"auth.txt\" file in the main directory of Magic Mirror with the code given to you at this URL: \n", authUrl,
+        "\nOnce you have created the file, either restart the Magic Mirror or wait the duration of the updateInterval specified in ./config/config.js.");
+        return;
+}
+
+
+/**
+ *	Spr17 - login() is called when user first uses the app (auth.txt does not exist yet). 
+ *	User is prompted to login to the Google console a place the code they are given into
+ *	a file named 'auth.txt' at the Magic Mirror root
+ */
+function login(oauth2Client, callback) {
+
+	try {
+        // Attempt to open user auth token.
+        code = fs.readFileSync("./auth.txt");
+        oauth2Client.getToken(code, function(err, token) {
+            if (err) {
+                console.log('Error while trying to retrieve access token', err);
+                return;
+            }
+            oauth2Client.credentials = token;
+            storeToken(token);
+            callback(oauth2Client);
+        });
+    }
+    catch(err) {
+ /*       // If the token could not be opened, give the user the URL to get a token to save.
+        console.log("Please create an \"auth.txt\" file in the main directory of Magic Mirror with the code given to you at this URL: \n", authUrl, 
+        "\nOnce you have created the file, either restart the Magic Mirror or wait the duration of the updateInterval specified in ./config/config.js.");
+        */
+		return;
+    }
+
 }
 
 /**
@@ -84,11 +138,21 @@ function getNewToken(oauth2Client, callback) {
 		scope: SCOPES
 	});
 	
+/*	
 	// Spr17 
 	var token;
 	try {
 		// Attempt to open user auth token.
-		token = fs.readFileSync("./auth.txt");
+		code = fs.readFileSync("./auth.txt");
+	    oauth2Client.getToken(code, function(err, token) {
+     		if (err) {
+        		console.log('Error while trying to retrieve access token', err);
+        		return;
+      		}
+      		oauth2Client.credentials = token;
+      		storeToken(token);
+      		callback(oauth2Client);
+    	});
 	}
 	catch(err) {
 		// If the token could not be opened, give the user the URL to get a token to save.
@@ -96,13 +160,13 @@ function getNewToken(oauth2Client, callback) {
 		"\nOnce you have created the file, either restart the Magic Mirror or wait the duration of the updateInterval specified in ./config/config.js.");
 		return;
 	}
-	// end Spr17
+	// end Spr17*/
 	oauth2Client.getToken(token, function(err, token) {
 		if (err) {
 		console.log('Error while trying to retrieve access token', err);
 		return;
 	}
-		oauth2Client.credentials = token;
+		oauth2Client.credentials = JSON.parse(token);
 		storeToken(token);
 		callback(oauth2Client);
 	});
