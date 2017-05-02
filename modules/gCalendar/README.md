@@ -57,6 +57,9 @@ Once the config file is in place, the google api and google auth libraries are i
 
 When first launching the module, you will see in the console a url. Copy and paste that into your browser, log in to your Google account using your username and password, and copy the code given an place that into a file named `auth.txt` in your Magic Mirror root folder. Then restart Magic Mirror or wait for the interval period to elapse (5 min by default, but can be changed in gCalendar.js) and your Google Calendar will be pulled.
 
+**NOTE** By default, this module will pull the user’s primary calendar. To change the desired calendar, the user should go to their Google calendar on a browser, select the drop-down menu, select ‘Calendar Settings’ and copy the Calendar ID in the ‘Calendar Address’ section of the settings. This code can be placed in modules/gCalendar/quickstart/quickstart.js as the value for desiredCalendar (line 33). Replace ‘primary’ with ‘YOUR-CALENDARID’ (the code you got from you Google Calendar settings. 
+If you have trouble finding your desired calendar ID, visit this sit for more detailed instructions: https://docs.simplecalendar.io/find-google-calendar-id/
+
 
 ## Configuration options
 
