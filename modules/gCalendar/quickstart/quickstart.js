@@ -25,6 +25,13 @@ var SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
 var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
     process.env.USERPROFILE) + '/.credentials/';
 var TOKEN_PATH = TOKEN_DIR + 'calendar-nodejs-quickstart.json';
+
+// User can change which calendar they wish to display
+// by changing desiredCalendar to the calendarID of the 
+// calendar they wish to display
+// by default this is set to the user's primary calendar
+var desiredCalendar = 'primary';
+
 var eventList = [];
 console.log('now in quickstart.js');
 
@@ -134,7 +141,7 @@ function listEvents(auth) {
 	var calendar = google.calendar('v3');
 	calendar.events.list({
 		auth: auth,
-		calendarId: 'primary',
+		calendarId: desiredCalendar,
 		timeMin: (new Date()).toISOString(),
 		maxResults: 10,
 		singleEvents: true,

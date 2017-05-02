@@ -24,7 +24,7 @@ Module.register("gCalendar", {
 		maxTitleLength: 25,
 
 		// Default 5 min interval
-		fetchInterval: 5 * 60 * 1000, 
+		fetchInterval: .025 * 60 * 1000, 
 		animationSpeed: 2000,
 		fade: true,
 		urgency: 7,
