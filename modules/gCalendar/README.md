@@ -2,10 +2,22 @@
 The `gCalendar` module is expanding upon the default calendar module of the MagicMirror.
 This module displays events from a public .ical calendar as well as allowing a user to have their private Google Calendar events pulled and merged to the pre-existing .ical calendar events.
 
-## Using the module
-First, the user should visit the Google Calendar API Node.js quickstart (https://developers.google.com/google-apps/calendar/quickstart/nodejs) and complete steps 1 and 2. 
+## Installing and Using the Module
+This document details how to install and use the gCalendar module addition to the Magic Mirror² program.
 
-Step 1 will have the user sign into the Google API Console and retrieve a file called `client_secret.json`. Put this file in `modules/gCalendar/quickstart/client_secret.js`.
+1. Open your system's command line prompt (hereafter referred to simply as "prompt"). For Windows, the recommended prompt is "Git Bash", as itis the most successful in conducted tests. For Unix based systems (including Mac), open "Terminal". 
+
+2. Run "node -v" in your prompt. If you get a version number back, skip to step 4 below. Otherwise, close your prompt and continue at 3. 
+
+3. Navigate to https://nodejs.org/en/download/ and install node.js for your platform. Reopen your prompt. 
+
+4. Run "npm install npm --global" in your prompt.
+
+5. Navigate to the directory of Magic Mirror and run npm install. 
+
+6. Visit the Google Calendar API Node.js quickstart (https://developers.google.com/google-apps/calendar/quickstart/nodejs) and complete steps 1 and 2. 
+
+Step 1 of quickstart will have the user sign into the Google API Console and retrieve a file called `client_secret.json`. Put this file in `modules/gCalendar/quickstart/client_secret.js`.
 
 **NOTE** on subsequent uses, if you create a different client_secret.js file, you will need to remove the old credentials file located in
 `~/.credentials/calendar-nodejs-quickstart.json`, otherwise you will receive an 'unauthorized_client' error
