@@ -3,7 +3,7 @@ The `gCalendar` module is expanding upon the default calendar module of the Magi
 This module displays events from a public .ical calendar as well as allowing a user to have their private Google Calendar events pulled and merged to the pre-existing .ical calendar events.
 
 ## Installing and Using the Module
-This document details how to install and use the gCalendar module addition to the Magic Mirror² program.
+This section details how to install and use the gCalendar module addition to the Magic Mirror² program.
 
 1. Open your system's command line prompt (hereafter referred to simply as "prompt"). For Windows, the recommended prompt is "Git Bash", as itis the most successful in conducted tests. For Unix based systems (including Mac), open "Terminal". 
 
